@@ -23,33 +23,39 @@ function invalid_email($email) {
     return false;
 }
 
-// check if password is valid
+// controlla che la password sia valida
 function invalid_password($password) {
-    // checking with regular expression
+    // controlla la lunghezza della password
     if((strlen(utf8_decode($password)))>256) return true;
     return false;
 }
 
-// check if password fields are matching
+// controlla che i due valori per le password siano identici
 function unmatching_passwords($password, $rep_password) {
     if($password !== $rep_password) return true;
     return false;
 }
 
-// check if user already exists
-existing_username($conn, $username) {
+// controlla che l'utente non esista già
+function existing_username($conn, $username) {
     $sql = "SELECT * FROM users WHERE username = ? ;";
-    // creating a prepared statement
+    // creo un prepared statement
     $stmt = mysqli_stmt_init($conn);
-    // if the statement couldn't be prepared, return to the signup with a db error
+    // se la preparazione è fallita, restituisce errore DB
     if(!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: ../signup.php?error=db_err");
         exit();
     }
-    // binding username to the statement
+    // binding tra username e statement
     mysqli_stmt_bind_param($stmt, "ss", $username);
     mysqli_stmt_execute($stmt);
-    // getting query result
+    // recupero risultati query
     $query_res = mysqli_stmt_get_result($stmt);
-
+    // recupero, se presente, i dati dell'utente di nome $username
+    if($usr_row = mysqli_fetch_assoc($query_res)) {
+        mysqli_stmt_close($stmt);
+        return $usr_row;
+    }
+    mysqli_stmt_close($stmt);
+    return false;
 }
