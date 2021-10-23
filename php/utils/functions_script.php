@@ -49,7 +49,7 @@ function existing_username($conn, $username) {
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
     if(!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../signup.php?error=usr_ex_db_err");
+        header("location: ../signup?error=usr_ex_db_err");
         exit();
     }
 
@@ -74,7 +74,7 @@ function existing_email($conn, $email) {
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
     if(!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../signup.php?error=mail_ex_db_err");
+        header("location: ../signup?error=mail_ex_db_err");
         exit();
     }
 
@@ -101,7 +101,7 @@ function create_user($conn, $username, $email, $password) {
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
     if(!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../signup.php?error=usr_create_db_err");
+        header("location: ../signup?error=usr_create_db_err");
         exit();
     }
 
@@ -114,7 +114,7 @@ function create_user($conn, $username, $email, $password) {
     mysqli_stmt_close($stmt);   // chiudo lo statement
 
     // reindirizzo l'utente in seguito al singup
-    header("location: ../../index.php?signup=success");
+    header("location: ../../index?signup=success");
     exit();
 }
 
@@ -129,7 +129,7 @@ function login_user($conn, $username, $password) {
 
     // se non esistono utenti con lo username o la mail specificata, torna al login
     if($user_data === false) {
-        header("location: ../login.php?error=usr_no_exists");
+        header("location: ../login?error=usr_no_exists");
         exit();
     }
 
@@ -140,7 +140,7 @@ function login_user($conn, $username, $password) {
 
     // se la password non era corretta, torna al login
     if($is_pswd_correct === false) {
-        header("location: ../login.php?error=wr_pswd");
+        header("location: ../login?error=wr_pswd");
         exit();
     }
     // altrimenti, avvia una sessione per l'utente
@@ -148,7 +148,7 @@ function login_user($conn, $username, $password) {
         session_start();    // avvia la sessione
         $_SESSION["usr"] = $user_data["username"];  // recupera lo username
         $_SESSION["mail"] = $user_data["email"];    //recupera l'email
-        header("location: ../../index.php");    // rimanda l'utente alla HomePage
+        header("location: ../../index");    // rimanda l'utente alla HomePage
         exit();
     }
 }

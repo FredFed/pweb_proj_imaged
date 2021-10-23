@@ -14,17 +14,17 @@ if(isset($_POST["submit_login"])) {
 
     // controlla che non ci siano campi vuoti
     if(empty_login($username, $password) !== false) {
-        header("location: ../login.php?error=empty_input");  // returning the user to the signup form
+        header("location: ../login?error=empty_input");  // returning the user to the signup form
         exit();     // manually terminating the script
     }
     // controlla se il nome utente è valido
     if(invalid_username($username) !== false && invalid_email($username) !== false) {
-        header("location: ../login.php?error=invalid_usr");
+        header("location: ../login?error=invalid_usr");
         exit();
     }
     // controlla che la password sia valida
     if(invalid_password($password) !== false) {
-        header("location: ../login.php?error=invalid_pswd");
+        header("location: ../login?error=invalid_pswd");
         exit();
     }
 
@@ -33,7 +33,7 @@ if(isset($_POST["submit_login"])) {
 }
 // ... altrimenti, lo reindirizza al login
 else {
-    header("location: ../login.php");
+    header("location: ../login");
     exit();
 }
 ?>

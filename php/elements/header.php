@@ -17,16 +17,16 @@
                 <!-- NAV CONTENT - ALL HAS TO CHANGE -->
                 <div id="easynav">
                     <ul>
-                    <li><a href="./index.php">Index</a></li>
+                    <li><a href="./index">Index</a></li>
                     <?php
                         // se l'utente è loggato, mostra il seguente contenuto
                         if(isset($_SESSION["usr"])) {
-                            echo "<li><a href='./php/logout.php'>Log out</a></li>";
+                            echo "<li><a href='./php/utils/logout_script'>Log out</a></li>";
                         }
                         // se l'utente non è loggato, mostra il seguente contenuto
                         else {
-                            echo "<li><a href='./php/signup.php'>Sign up</a></li>";
-                            echo "<li><a href='./php/login.php'>Log in</a></li>";
+                            echo "<li><a href='./php/signup'>Sign up</a></li>";
+                            echo "<li><a href='./php/login'>Log in</a></li>";
                         }
                     ?>
                     </ul>

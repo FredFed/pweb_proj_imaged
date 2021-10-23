@@ -17,37 +17,37 @@ if(isset($_POST["submit_signup"])) {
 
     // controlla che non ci siano campi vuoti
     if(empty_input($username, $email, $password, $rep_password) !== false) {
-        header("location: ../signup.php?error=empty_input");  // returning the user to the signup form
-        exit();     // manually terminating the script
+        header("location: ../signup?error=empty_input");
+        exit();
     }
     // controlla se il nome utente è valido
     if(invalid_username($username) !== false) {
-        header("location: ../signup.php?error=invalid_usr");
+        header("location: ../signup?error=invalid_usr");
         exit();
     }
     // controlla che la mail sia valida
     if(invalid_email($email) !== false) {
-        header("location: ../signup.php?error=invalid_email");
+        header("location: ../signup?error=invalid_email");
         exit();
     }
     // controlla che la password sia valida
     if(invalid_password($password) !== false) {
-        header("location: ../signup.php?error=invalid_pswd");
+        header("location: ../signup?error=invalid_pswd");
         exit();
     }
     // controlla che i due valori per le password siano identici
     if(unmatching_passwords($password, $rep_password) !== false) {
-        header("location: ../signup.php?error=pswd_no_match");
+        header("location: ../signup?error=pswd_no_match");
         exit();
     }
     // controlla che l'utente non esista già
     if(existing_username($conn, $username) !== false) {
-        header("location: ../signup.php?error=usr_exists");
+        header("location: ../signup?error=usr_exists");
         exit();
     }
     // controlla che l'email non esista già
     if(existing_email($conn, $email) !== false) {
-        header("location: ../signup.php?error=email_exists");
+        header("location: ../signup?error=email_exists");
         exit();
     }
 
@@ -56,7 +56,7 @@ if(isset($_POST["submit_signup"])) {
 }
 // ... altrimenti, lo reindirizza alla pagina principale
 else {
-    header("location: ../../index.php");
+    header("location: ../../index");
     exit();
 }
 ?>
