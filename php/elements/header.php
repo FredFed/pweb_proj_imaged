@@ -13,8 +13,17 @@
                 <div id="easynav">
                     <ul>
                     <li><a href="./index.php">Index</a></li>
-                    <li><a href="./php/signup.php">Sign up</a></li>
-                    <li><a href="./php/login.php">Log in</a></li>
+                    <?php
+                        // se l'utente è loggato, mostra il seguente contenuto
+                        if(isset($_SESSION["usr"])) {
+                            echo "<li><a href='./php/logout.php'>Log out</a></li>";
+                        }
+                        // se l'utente non è loggato, mostra il seguente contenuto
+                        else {
+                            echo "<li><a href='./php/signup.php'>Sign up</a></li>";
+                            echo "<li><a href='./php/login.php'>Log in</a></li>";
+                        }
+                    ?>
                     </ul>
                 </div>
             </nav>

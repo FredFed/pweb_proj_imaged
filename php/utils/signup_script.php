@@ -1,60 +1,62 @@
 <?php
 
-// signup management
+// controlla se l'utente è arrivato a questa pagina compilando il form...
 if(isset($_POST["submit_signup"])) {
-    // getting all the values from our signup form and escaping dubious characters
-    $username = mysqli_real_escape_string($conn, $_POST["usrname"]);
-    $email = mysqli_real_escape_string($conn, $_POST["mail"]);
-    $password = mysqli_real_escape_string($conn, $_POST["pswd"]);
-    $rep_password = mysqli_real_escape_string($conn, $_POST["rep_pswd"]);
 
-    // including our db connection variable and util functions
+    // recupero tutti i valori dal form di signup
+    $username = $_POST["username"];
+    $email = $_POST["email"];
+    $password = $_POST["pswd"];
+    $rep_password = $_POST["rep_pswd"];
+
+    // includo la connessione al DB ed alcune funzioni di controllo/utilità
     require_once './db_conn_handler_script.php';
     require_once './functions_script.php';
 
-    // basic error handling in form compilation
+    // ########## GESTIONE ERRORI ##########
 
-    // check if there is empty input
+    // controlla che non ci siano campi vuoti
     if(empty_input($username, $email, $password, $rep_password) !== false) {
-        // empty imput error
         header("location: ../signup.php?error=empty_input");  // returning the user to the signup form
         exit();     // manually terminating the script
     }
-    // check if username is valid
+    // controlla se il nome utente è valido
     if(invalid_username($username) !== false) {
         header("location: ../signup.php?error=invalid_usr");
         exit();
     }
-    // check if email is valid
+    // controlla che la mail sia valida
     if(invalid_email($email) !== false) {
         header("location: ../signup.php?error=invalid_email");
         exit();
     }
-    // check if password is valid
+    // controlla che la password sia valida
     if(invalid_password($password) !== false) {
         header("location: ../signup.php?error=invalid_pswd");
         exit();
     }
-    // check if password fields are matching
+    // controlla che i due valori per le password siano identici
     if(unmatching_passwords($password, $rep_password) !== false) {
         header("location: ../signup.php?error=pswd_no_match");
         exit();
     }
-    // check if user already exists
+    // controlla che l'utente non esista già
     if(existing_username($conn, $username) !== false) {
         header("location: ../signup.php?error=usr_exists");
         exit();
     }
-    // check if email is already used
+    // controlla che l'email non esista già
     if(existing_email($conn, $email) !== false) {
         header("location: ../signup.php?error=email_exists");
         exit();
     }
 
-    // after passing all error-tests, the user might now be created
+    // crea l'utente a partire dai dati recuperati dal signup form
     create_user($conn, $username, $email, $password);
 }
+// ... altrimenti, lo reindirizza alla pagina principale
 else {
-    header("location: ../signup.php");
+    header("location: ../../index.php");
+    exit();
 }
 ?>
