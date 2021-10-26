@@ -1,8 +1,10 @@
 <?php
-    session_start();
-    if(isset($_SESSION["usr"])) {
-        header("location: ../index.php");
-    }
+
+session_start();
+if(isset($_SESSION["usr"])) {
+    header("location: ../index");
+}
+
 ?>
 
 
@@ -36,6 +38,9 @@
                                 <a href="./../privacy.html" target="_blank">privacy policies</a>
                                 and how we collect, use and share your personal data and to 
                                 accept them.
+                            </p>
+                            <p class="login-screen-registration">Already have an account?
+                                <a href="./login">Log in!</a>
                             </p>
                         </form>
                     </div>

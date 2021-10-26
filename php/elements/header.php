@@ -1,13 +1,9 @@
-<?php
-    session_start();
-?>
-
-
 <!DOCTYPE html>
 <html lang="it">
     <head>
-        <meta charset="utf-8">
-        <meta name=”viewport” content=”width=device-width, initial-scale=1”>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/styles.css">
         <title>Imaged</title>
     </head>
@@ -21,6 +17,7 @@
                     <?php
                         // se l'utente è loggato, mostra il seguente contenuto
                         if(isset($_SESSION["usr"])) {
+                            echo "<li><a href='./profile'>Profile</a></li>";
                             echo "<li><a href='./php/utils/logout_script'>Log out</a></li>";
                         }
                         // se l'utente non è loggato, mostra il seguente contenuto

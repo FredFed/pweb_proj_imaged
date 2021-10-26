@@ -1,8 +1,10 @@
 <?php
-    session_start();
-    if(isset($_SESSION["usr"])) {
-        header("location: ../index.php");
-    }
+
+session_start();
+if(isset($_SESSION["usr"])) {
+    header("location: ../index");
+}
+
 ?>
 
 
@@ -30,7 +32,7 @@
                             <input type="password" name="pswd" placeholder="Password">
                             <button type="submit" name="submit_login">Sign in</button>
                             <p class="login-screen-registration">Don't have an account?
-                                <a href="./signup.php">Sign up!</a>
+                                <a href="./signup">Sign up!</a>
                             </p>
                         </form>
                     </div>

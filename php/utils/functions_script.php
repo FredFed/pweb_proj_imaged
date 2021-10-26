@@ -82,7 +82,7 @@ function existing_email($conn, $email) {
     mysqli_stmt_execute($stmt); // eseguo lo statement
     $query_res = mysqli_stmt_get_result($stmt); // recupero risultati query
 
-    // recupero, se presente, i dati dell'utente di mail $email
+    // recupero, se presente, i dati dell'utente avente mail $email
     if($usr_row = mysqli_fetch_assoc($query_res)) {
         mysqli_stmt_close($stmt);
         return $usr_row;
@@ -95,6 +95,9 @@ function existing_email($conn, $email) {
 
 // crea l'utente a partire dai dati recuperati dal signup form
 function create_user($conn, $username, $email, $password) {
+
+    // ########## CREAZIONE UTENTE ##########
+
     // comando SQL INSERT
     $sql = "INSERT INTO users (username, password, email, date) VALUES (?, ?, ?, now());";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
@@ -112,6 +115,29 @@ function create_user($conn, $username, $email, $password) {
     mysqli_stmt_bind_param($stmt, "sss", $username, $password, $email);
     mysqli_stmt_execute($stmt); // eseguo lo statement
     mysqli_stmt_close($stmt);   // chiudo lo statement
+
+
+    // ########## AGGIUNTA IMMAGINE PROFILO ##########
+
+    $sql_img = "SELECT * FROM users WHERE username = ? ;";
+    $stmt2 = mysqli_stmt_init($conn);
+    if(!mysqli_stmt_prepare($stmt2, $sql_img)) {
+        header("location: ../signup?error=prof_img_db_err");
+        exit();
+    }
+    mysqli_stmt_bind_param($stmt2, "s", $username);
+    mysqli_stmt_execute($stmt2); // eseguo lo statement
+    $res = mysqli_stmt_get_result($stmt2);
+    // aggiungo profile-image di default
+    if($usr_data = mysqli_fetch_assoc($res)) {
+        $usrid = $usr_data['id'];   // recupero id nuovo utente
+        // comando SQL INSERT; NOTA: non sono necessari prepared statement: solo valori numerici sicuri
+        $sql_prof_img = "INSERT INTO profileimg (usrid, isset) VALUES ('$usrid', 0) ;";
+        $query_res = mysqli_query($conn, $sql_prof_img);
+    }
+
+    mysqli_stmt_close($stmt2);   // chiudo lo statement
+    
 
     // reindirizzo l'utente in seguito al singup
     header("location: ../../index?signup=success");
@@ -146,10 +172,49 @@ function login_user($conn, $username, $password) {
     // altrimenti, avvia una sessione per l'utente
     else {
         session_start();    // avvia la sessione
+        $_SESSION["usrid"] = $user_data["id"];  // recupera l'id utente
         $_SESSION["usr"] = $user_data["username"];  // recupera lo username
         $_SESSION["mail"] = $user_data["email"];    //recupera l'email
         header("location: ../../index");    // rimanda l'utente alla HomePage
         exit();
     }
+}
+
+// imposta l'entry relativa all'immagine del profilo dell'utente a 1
+function update_prof_img($conn, $usrid) {
+    // comando SQL UPDATE
+    $sql = "UPDATE profileimg SET isset=1 WHERE usrid='$usrid';";
+    mysqli_query($conn, $sql);    // esegue la query nel DB
+    // NOTA: non c'è bisogno di prepared statement, perché lo usrid è generato dal DB stesso
+
+    return(true);
+}
+
+// registra la cancellazione dell'immagine profilo dell'utente e aggiorna il DB
+function delete_prof_img($conn, $usrid) {
+    // comendo SQL UPDATE
+    $sql = "UPDATE profileimg SET isset=0 WHERE usrid='$usrid';";
+    mysqli_query($conn, $sql);    // esegue la query nel DB
+    // NOTA: non c'è bisogno di prepared statement, perché lo usrid è generato dal DB stesso
+
+    return(true);
+}
+
+// recupera l'estensione dell'immagine profilo dell'utente
+function get_pimg_ext($usrid) {
+    // recupero il nome dell'immagine del profilo
+    $filename = "../../resources/profileimg/profile".$usrid."*";
+    // recupero l'estensione prendendo il primo match della funzione "glob" e tenendo la parte finale
+    $file_meta = glob($filename);
+    $file_ext = explode(".", $file_meta[0]);    // il primo match della ricerca glob è il file corretto
+    $ext = end($file_ext);   // prendiamo il token dopo il '.', ovvero l'estensione
+
+    return($ext);
+}
+
+// elimina il file col path name specificato
+function del_file($path) {
+    if(!unlink($path)) return(true);
+    else return(false);
 }
 ?>

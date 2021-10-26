@@ -1,0 +1,25 @@
+* {
+    box-sizing: border-box;
+    /* margin: 0;
+    padding: 0; */
+}
+
+.profile-img-frame {
+    background-color: black;
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.profile-img {
+    height: 120px;
+    width: 120px;
+    transform: translate(-8%, -8%);
+}
+
+.profile-img:hover {
+    opacity: 0.6;
+    cursor: p;
+}
