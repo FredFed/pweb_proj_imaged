@@ -11,13 +11,14 @@
         <header>
             <nav>
                 <!-- NAV CONTENT - ALL HAS TO CHANGE -->
-                <div id="easynav">
+                <div id="easynav">      <!-- TODO change name -->
                     <ul>
                     <li><a href="./index">Index</a></li>
                     <?php
                         // se l'utente è loggato, mostra il seguente contenuto
                         if(isset($_SESSION["usr"])) {
                             echo "<li><a href='./profile'>Profile</a></li>";
+                            echo "<li><a href='./php/upload'>Upload image</a></li>";
                             echo "<li><a href='./php/utils/logout_script'>Log out</a></li>";
                         }
                         // se l'utente non è loggato, mostra il seguente contenuto
@@ -27,6 +28,12 @@
                         }
                     ?>
                     </ul>
+                </div>
+                <div class="searchbox-frame" action="searchbox.php" method="POST">
+                    <form class="searchbox">
+                        <input type="text" name="searchbox" placeholder="Search">
+
+                    </form>
                 </div>
             </nav>
         </header>

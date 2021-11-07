@@ -2,7 +2,7 @@
 
 session_start();
 if(isset($_SESSION["usr"])) {
-    header("location: ../index");
+    header("location: ../profile");
 }
 
 ?>
@@ -40,20 +40,22 @@ if(isset($_SESSION["usr"])) {
             </div>
 
             <?php
-                if(isset($_GET["error"])) {
-                    if($_GET["error"]=="empty_input")
-                        echo "<p class=&quoterr-box&quot>All fields must be filled</p>";
-                    else if($_GET["error"]=="invalid_usr")
-                        echo "<p class=&quoterr-box&quot>Invalid email/username.</p>";
-                    else if($_GET["error"]=="invalid_pswd")
-                        echo "<p class=&quoterr-box&quot>Invalid password.</p>";
-                    else if($_GET["error"]=="usr_no_exists")
-                        echo "<p class=&quoterr-box&quot>The username/email is not of a valid account.</p>";
-                    else if($_GET["error"]=="wr_pswd")
-                        echo "<p class=&quoterr-box&quot>Password is incorrect.</p>";
-                    else if($_GET["error"]=="usr_ex_db_err" || $_GET["error"]=="mail_ex_db_err"
-                                                            || $_GET["error"]=="usr_create_db_err")
-                        echo "<p class=&quoterr-box&quot>Something went wrong, please try again.</p>";
+                if(isset($_GET["err"])) {
+                    if($_GET["err"]=="bad_login")
+                        echo "<p class='err-box'>You have to log in first</p>";
+                    if($_GET["err"]=="empty_input")
+                        echo "<p class='err-box'>All fields must be filled</p>";
+                    else if($_GET["err"]=="invalid_usr")
+                        echo "<p class='err-box'>Invalid email/username.</p>";
+                    else if($_GET["err"]=="invalid_pswd")
+                        echo "<p class='err-box'>Invalid password.</p>";
+                    else if($_GET["err"]=="usr_no_exists")
+                        echo "<p class='err-box'>The username/email is not of a valid account.</p>";
+                    else if($_GET["err"]=="wr_pswd")
+                        echo "<p class='err-box'>Password is incorrect.</p>";
+                    else if($_GET["err"]=="usr_ex_db_err" || $_GET["err"]=="mail_ex_db_err"
+                                                            || $_GET["err"]=="usr_create_db_err")
+                        echo "<p class='err-box'>Something went wrong, please try again.</p>";
                 }
             ?>
 

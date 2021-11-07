@@ -9,6 +9,6 @@
 <body>
     <h1>404 - Sorry! We weren't able to find this page.<br></h1>
     <h2>Well, what about some kitten pics?</h2>
-    <a href="./index.php">Index</a>
+    <a href="../index.php">Index</a>
 </body>
 </html>

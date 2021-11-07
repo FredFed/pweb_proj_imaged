@@ -2,7 +2,7 @@
 
 session_start();
 if(!isset($_SESSION["usr"])) {
-    header("location: ./index?err=bad_login");
+    header("location: ./php/login?err=bad_login");
 }
 require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
@@ -41,10 +41,18 @@ require_once './php/utils/definitions.php';
             ?>
         </div>
     </container>
+    <container class="gallery-frame">
+        <div class="gallery-section">
+            <h2 id="gallery-title">Your uploads</h2>
+            <div class="gallery">
+                <!-- GALLERY GOES HERE -->
+            </div>
+        </div>
+    </container>
     <?php
         if(isset($_SESSION["usr"])) { echo"
             <form action='./php/utils/upload_profimg_script.php' method='POST' enctype='multipart/form-data'>
-                <input type='file' name='prof_img' accept='image/*' required>
+                <input type='file' name='prof_img' accept='image/jpeg, image/png' required>
                 <button type='submit' name='submit_prof_img'>UPLOAD IMAGE</button>
             </form>";
             echo "<br>";
@@ -52,6 +60,17 @@ require_once './php/utils/definitions.php';
             <form action='./php/utils/del_profimg_script.php' method='POST'>
                 <button type='submit' name='del_prof_img'>DELETE IMAGE</button>
             </form>";
+        }
+    ?>
+
+    <?php
+        if(isset($_GET["err"])) {
+            if($_GET["err"]=="bad_ext")
+            echo "<p class='err-box'>Only .jpeg, .jpg, .png files are accepted</p>";
+            else if($_GET["err"]=="bad_ext")
+            echo "<p class='err-box'>Server err, please try again</p>";
+            else if($_GET["err"]=="sz_2_lg")
+            echo "<p class='err-box'>Max file size is 10MB</p>";
         }
     ?>
             <!-- END MAIN DIV -->

@@ -1,8 +1,13 @@
 <?php
 
 session_start();
+if(!isset($_SESSION["usr"])) {
+    header("location: ../login?err=bad_login");
+    exit();
+}
 require_once './db_conn_handler_script.php';
 require_once './functions_script.php';
+require_once './definitions.php';
 
 // controlla che l'utente sia arrivato qui cliccando il pulsante del cambio immagine
 if(isset($_POST['submit_prof_img'])) {
@@ -16,25 +21,31 @@ if(isset($_POST['submit_prof_img'])) {
     $file_type = $file["type"];
 
     // recupero l'estensione
-    $temp_ext = explode('.', $file_name);   // tokenizzo il nome del file
-    $file_ext = strtolower(end($temp_ext));     // recupero solo l'estensione in lowercase
+    $file_ext = get_ext($file_name);
 
-    // impongo un certo insieme di estensioni da rispettare
-    $allowed_ext = array('jpg', 'jpeg', 'png');
 
     // ########## GESTIONE ERRORI ##########
 
     // se l'estensione non è consentita, restituisci errore
     if(in_array($file_ext, $allowed_ext) === false) {
-        echo "File extension not supported";
+        header("location: ../../profile?err=bad_ext");
         exit();
     }
 
     // se c'è stato un errore nel caricamente dell'immagine, restituisci errore
     if($file_error === true) {
-        echo "Error while uploading file, please try again";
+        header("location: ../../profile?err=up_err");
         exit();
     }
+
+    // se la dimensione è maggiore di quella consentita, restituisci errore
+    if($file_size > $MAX_IMG_SIZE) {
+        header("location: ../../profile?err=sz_2_lg");
+        exit();
+    }
+
+
+    // ########## UPLOAD IMMAGINE ##########
 
     // recupero l'id utente per associarlo alla nuova immagine profilo
     $usrid = $_SESSION["usrid"];
@@ -45,15 +56,25 @@ if(isset($_POST['submit_prof_img'])) {
     // specifico un percorso finale per il file
     $image_path = '../../resources/profileimg/'.$image_name;
 
-    // salvo il file all'interno del percorso
-    move_uploaded_file($file_tmp_name, $image_path);
+    // elimino la vecchia immagine di profilo eventualmente presente
+    if(!delete_prof_img($conn, $usrid)) header("location: ../../profile?err=no_repl");
 
     // comunico al DB che l'utente ha impostato un'immagine del profilo
     update_prof_img($conn, $usrid);
 
+    // salvo il file all'interno del percorso
+    move_uploaded_file($file_tmp_name, $image_path);
+
+    // ridimensiono l'immagine per adattarla alla risoluzione pro-pic
+    $temperr=square_image($image_path, $image_path, $file_ext);
+    if($temperr!="success") {   // se il processo non è andato a buon fine...
+        unlink($image_path);    // rimuove l'immagine appena salvata
+        header("location: ../../profile?".$temperr);    // reindirizza + mostra errore
+        exit();
+    } 
+
     // il file è stato caricato; reindirizzo l'utente
     header("location: ../../profile?up_pimg=success");
-
     exit();
 }
 // altrimenti reindirizzalo al suo profilo
