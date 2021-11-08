@@ -27,9 +27,10 @@ include_once './php/utils/definitions.php';
     </head>
     <body>
         <header>
-            <nav>
+        <nav>
                 <!-- NAV CONTENT - ALL HAS TO CHANGE -->
                 <div class="nav-frame">
+
                     <div class="logo-frame">
                         <a class="logo-link" href="./index">
                             <div class="logo-frame-1">
@@ -43,23 +44,38 @@ include_once './php/utils/definitions.php';
 
                     <div class="searchbox-frame" action="searchbox.php" method="POST">
                         <form class="searchbox-form">
-                            <i class='bx bx-x searchbox-clear' ></i>
+                            <i class='bx bx-x searchbox-clear'></i>
                             <input type="text" class="searchbox" name="searchbox" placeholder="Search">
                             <i class='bx bx-search-alt searchbox-search'></i>
                         </form>
                     </div>
-                    <div class="nav-buttons">      <!-- TODO change name -->
-                        <ul class="nav-menu-list">
+
+                    <div class="upload-image-frame">
+                        <a class="upload-link" href="./php/upload">
+                            <div class="upload-image-button button" tabindex="1">
+                                <i class='bx bx-image-add upload-image-icon'></i>
+                                <p class="button-text">Post</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-icons-frame">
                         <?php
-                            // se l'utente è loggato, mostra il seguente contenuto
-                            if(isset($_SESSION["usr"])) {
-                                echo "<li class='nav-menu-item'><a href='./profile'>Profile</a></li>";
-                                echo "<li class='nav-menu-item'><a href='./php/upload'>Upload image</a></li>";
-                                echo "<li class='nav-menu-item'><a href='./php/utils/logout_script'>Log out</a></li>";
+                            if(isset($_SESSION["usr"])) { echo "
+                                <ul class='nav-icons-list'>
+                                    <li>
+                                        <a href='#'><i class='bx bx-message nav-icon'></i></a>
+                                        <!-- <i class='bx bxs-message-detail nav-icon'></i> -->
+                                    </li>
+                                    <li>
+                                        <a href='#'><i class='bx bx-square nav-icon'></i></a>
+                                        <!-- <i class='bx bxs-notification nav-icon'></i> -->
+                                    </li>
+                                </ul>";
                             }
                         ?>
-                        </ul>
                     </div>
+                    
                     <div class="nav-profile-login-frame">
                     <?php
                             // se l'utente è loggato, mostra il seguente contenuto
@@ -67,11 +83,11 @@ include_once './php/utils/definitions.php';
                                 $usrid = $_SESSION["usrid"];    // recupero l'id utente
                                 // recupero i dati relativi alla profile pic dell'utente
                                 $sql_prof_img = "SELECT * FROM profileimg WHERE usrid = $usrid ;";
-                                $query_prof_img = mysqli_fetch_assoc(mysqli_query($conn, $sql_prof_img));
+                                $res_prof_img = mysqli_fetch_assoc(mysqli_query($conn, $sql_prof_img));
 
                                 echo "<div class='nav-profile-frame'>";
                                 // se l'utente non ha impostato alcuna immagine del profilo
-                                if($query_prof_img['isset'] == 0)
+                                if($res_prof_img['isset'] == 0)
                                     echo "  <a class='nav-profile-image-frame' href='./profile'>
                                                 <img class='nav-profile-img' src='".$DFLT_PROF_IMG."'>
                                             </a>";
@@ -81,8 +97,7 @@ include_once './php/utils/definitions.php';
                                     $filename = "./resources/profileimg/profile".$usrid."*";
                                     // recupero l'estensione prendendo il primo match della funzione "glob" e tenendo la parte finale
                                     $file_meta = glob($filename);
-                                    $file_ext = explode(".", $file_meta[0]);    // il primo match della ricerca glob è il file corretto
-                                    $ext = end($file_ext);   // prendiamo il token dopo il '.', ovvero l'estensione
+                                    $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
 
                                     echo "  <a class='nav-profile-image-frame' href='./profile'>
                                                 <img class='nav-profile-img' src='./resources/profileimg/profile".$usrid.".".$ext."?".mt_rand()."'>
@@ -93,8 +108,20 @@ include_once './php/utils/definitions.php';
                             // se l'utente non è loggato, mostra il seguente contenuto
                             else {
                                 echo "  <div class='nav-login-frame'>
-                                            <li class='nav-menu-item'><a href='./php/signup'>Sign up</a></li>
-                                            <li class='nav-menu-item'><a href='./php/login'>Log in</a></li>
+                                            <ul class='nav-login-list'>
+                                                <li class='nav-menu-item'><a href='./php/login'>
+                                                    <div class='nav-login-button button'>
+                                                        <i class='bx bx-log-in-circle login-icon' ></i>
+                                                        <p class='button-text'>Log in</p>
+                                                    </div>
+                                                </a></li>
+                                                <li class='nav-menu-item'><a href='./php/signup'>
+                                                    <div class='nav-signup-button button'>
+                                                        <i class='bx bx-spreadsheet signup-icon' ></i>
+                                                        <p class='reverse-button-text'>Sign up</p>
+                                                    </div>
+                                                </a></li>
+                                            </ul>
                                         </div>";
                             }
                         ?>
