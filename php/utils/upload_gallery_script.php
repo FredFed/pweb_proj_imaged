@@ -45,7 +45,9 @@ if(isset($_POST["submit_img_gallery"])) {
         exit();
     }
 
-    $img_path = "../../resources/gallery/".uniqid("", true).".".$img_ext;
+    // genero un numero casuale eliminando il punto decimale presente in esso (mediante regex) e appendo l'estensione
+    $img_final_name = (preg_replace("/[.]/", "", uniqid("", true))).".".$img_ext;
+    $img_path = "../../resources/gallery/".$img_final_name;
 
     // ########## AGGIUNTA ENTRY AL DB #########
 
@@ -54,7 +56,7 @@ if(isset($_POST["submit_img_gallery"])) {
     else $usrid = NULL;
 
     // aggiorno il database con l'entry relativa all'immagine
-    if(!upload_gallery_img($conn, $usrid, $img_path, $img_title, $img_desc, $img_tags, $img_ls, $img_hddn)) {
+    if(!upload_gallery_img($conn, $usrid, $img_final_name, $img_title, $img_desc, $img_tags, $img_ls, $img_hddn)) {
         header("location: ../upload?err=up_img_err");
         exit();
     }
@@ -63,7 +65,7 @@ if(isset($_POST["submit_img_gallery"])) {
     move_uploaded_file($img_tmp_name, $img_path);
 
     
-    header("location: ../upload?up_img=success");
+    header("location: ../../profile?up_img=success");
     exit();
 }
 else {

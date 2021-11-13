@@ -60,11 +60,11 @@ if(isset($_POST["submit_signup"])) {
     }
 
     // reindirizza l'utente alla in seguito al signup
-    header("location: ../../index?signup=success");
+    header("location: ../../profile?signup=success");
 }
 // ... altrimenti, lo reindirizza alla pagina principale
 else {
-    header("location: ../../index");
+    header("location: ../../");
     exit();
 }
 ?>

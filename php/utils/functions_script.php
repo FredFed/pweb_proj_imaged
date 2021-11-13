@@ -129,7 +129,7 @@ function create_user($conn, $username, $email, $password) {
         $usrid = $user_data['id'];   // recupero id nuovo utente
         // comando SQL INSERT; NOTA: non sono necessari prepared statement: solo valori numerici sicuri
         $sql_prof_img = "INSERT INTO profileimg (usrid, isset) VALUES ('$usrid', 0) ;";
-        $query_res = mysqli_query($conn, $sql_prof_img);
+        mysqli_query($conn, $sql_prof_img);
     }
 
     mysqli_stmt_close($stmt);   // chiudo lo statement
@@ -388,5 +388,13 @@ function square_image($src_path, $dest_path, $file_ext) {
 
     imagedestroy($dest_img);
     return "success";
+}
+
+
+// restituisce il nome del file senza estensione
+function drop_ext($filename) {
+    $result = explode('.', $filename);
+
+    return($result[0]);
 }
 ?>

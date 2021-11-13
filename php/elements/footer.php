@@ -1,6 +1,1 @@
-        </div>
-    </body>
-    <footer>
-        <!-- FOOTER CONTENT -->
-    </footer>
-</html>
+<!-- FOOTER CONTENT -->
