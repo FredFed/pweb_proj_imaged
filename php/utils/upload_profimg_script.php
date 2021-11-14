@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if(!isset($_SESSION["usr"])) {
+if(!isset($_SESSION["usrid"])) {
     header("location: ../login?err=bad_login");
     exit();
 }
@@ -57,10 +57,10 @@ if(isset($_POST['submit_prof_img'])) {
     $image_path = '../../resources/profileimg/'.$image_name;
 
     // elimino la vecchia immagine di profilo eventualmente presente
-    if(!delete_prof_img($conn, $usrid)) header("location: ../../profile?err=no_repl");
+    if(!delete_prof_img($conn)) header("location: ../../profile?err=no_repl");
 
     // comunico al DB che l'utente ha impostato un'immagine del profilo
-    update_prof_img($conn, $usrid);
+    update_prof_img($conn);
 
     // salvo il file all'interno del percorso
     move_uploaded_file($file_tmp_name, $image_path);

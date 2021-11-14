@@ -44,7 +44,7 @@ function unmatching_passwords($password, $rep_password) {
 
 // controlla che l'utente non esista già
 function existing_username($conn, $username) {
-    $sql = "SELECT * FROM users WHERE username = ? ;";  // comando SQL SELECT
+    $sql = "SELECT * FROM users WHERE usrName = ? ;";  // comando SQL SELECT
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
@@ -68,7 +68,7 @@ function existing_username($conn, $username) {
 
 // controlla che l'email non esista già
 function existing_email($conn, $email) {
-    $sql = "SELECT * FROM users WHERE email = ? ;"; // comando SQL SELECT
+    $sql = "SELECT * FROM users WHERE usrMail = ? ;"; // comando SQL SELECT
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
@@ -97,7 +97,7 @@ function create_user($conn, $username, $email, $password) {
     // ########## CREAZIONE UTENTE ##########
 
     // comando SQL INSERT
-    $sql = "INSERT INTO users (username, password, email, date) VALUES (?, ?, ?, now());";
+    $sql = "INSERT INTO users (usrName, usrPswd, usrMail, usrDate) VALUES (?, ?, ?, now());";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
@@ -116,7 +116,7 @@ function create_user($conn, $username, $email, $password) {
 
     // ########## AGGIUNTA IMMAGINE PROFILO ##########
 
-    $sql_img = "SELECT * FROM users WHERE username = ? ;";
+    $sql_img = "SELECT * FROM users WHERE usrName = ? ;";
     $stmt = mysqli_stmt_init($conn);
     if(!mysqli_stmt_prepare($stmt, $sql_img)) {
         return("err=prof_img_db_err");
@@ -126,9 +126,9 @@ function create_user($conn, $username, $email, $password) {
     $res = mysqli_stmt_get_result($stmt);
     // aggiungo profile-image di default
     if($user_data = mysqli_fetch_assoc($res)) {
-        $usrid = $user_data['id'];   // recupero id nuovo utente
-        // comando SQL INSERT; NOTA: non sono necessari prepared statement: solo valori numerici sicuri
-        $sql_prof_img = "INSERT INTO profileimg (usrid, isset) VALUES ('$usrid', 0) ;";
+        $usrid = $user_data["usrId"];   // recupero id nuovo utente
+        // comando SQL INSERT; NOTA: non sono necessari prepared statement: valori generati dal server
+        $sql_prof_img = "INSERT INTO profimage (usrId, piIsSet) VALUES ('$usrid', 0) ;";
         mysqli_query($conn, $sql_prof_img);
     }
 
@@ -136,9 +136,9 @@ function create_user($conn, $username, $email, $password) {
 
     // logga nell'account appena creato
     session_start();    // avvia la sessione
-    $_SESSION["usrid"] = $user_data["id"];  // recupera l'id utente
-    $_SESSION["usr"] = $user_data["username"];  // recupera lo username
-    $_SESSION["mail"] = $user_data["email"];    //recupera l'email
+    $_SESSION["usrid"] = $user_data["usrId"];  // recupera l'id utente
+    $_SESSION["usrname"] = $user_data["usrName"];  // recupera lo username
+    $_SESSION["mail"] = $user_data["usrMail"];    //recupera l'email
     return("success");
 }
 
@@ -155,7 +155,7 @@ function login_user($conn, $username, $password) {
     if($user_data === false) return("err=usr_no_exists");
 
     // recupero la password effettiva dell'utente
-    $usr_real_pswd = $user_data["password"];
+    $usr_real_pswd = $user_data["usrPswd"];
     // controllo che la password fornita sia uguale a quella reale
     $is_pswd_correct = password_verify($password, $usr_real_pswd);
 
@@ -164,10 +164,10 @@ function login_user($conn, $username, $password) {
 
     // se tutto è andato bene, avvia una sessione per l'utente
     session_start();    // avvia la sessione
-        $_SESSION["usrid"] = $user_data["id"];  // recupera l'id utente
-        $_SESSION["usr"] = $user_data["username"];  // recupera lo username
-        $_SESSION["mail"] = $user_data["email"];    //recupera l'email
-        return("success");
+    $_SESSION["usrid"] = $user_data["usrId"];  // recupera l'id utente
+    $_SESSION["usrname"] = $user_data["usrName"];  // recupera lo username
+    $_SESSION["mail"] = $user_data["usrMail"];    //recupera l'email
+    return("success");
 }
 
 
@@ -180,22 +180,30 @@ function get_ext($file_name) {
 }
 
 // imposta l'entry relativa all'immagine del profilo dell'utente a 1
-function update_prof_img($conn, $usrid) {
+function update_prof_img($conn) {
+    session_start();
+    if(isset($_SESSION["usrid"])) $usrid = $_SESSION["usrid"];
+    else return false;  // l'utente non è loggato correttamente
+
     // comando SQL UPDATE
-    $sql = "UPDATE profileimg SET isset=1 WHERE usrid='$usrid';";
+    $sql = "UPDATE profimage SET piIsSet=1 WHERE usrId='$usrid';";
     mysqli_query($conn, $sql);    // esegue la query nel DB
-    // NOTA: non c'è bisogno di prepared statement, perché lo usrid è generato dal DB stesso
+    // NOTA: non c'è bisogno di prepared statement, perché lo usrid è generato dal server stesso
 
     return true;
 }
 
 // registra la cancellazione dell'immagine profilo dell'utente e aggiorna il DB
-function delete_prof_img($conn, $usrid) {
+function delete_prof_img($conn) {
     // ######### AGGIORNAMENTO DB ##########
+    session_start();
+    if(isset($_SESSION["usrid"])) $usrid = $_SESSION["usrid"];
+    else return false;  // l'utente non è loggato correttamente
+
     // comendo SQL UPDATE
-    $sql = "UPDATE profileimg SET isset=0 WHERE usrid='$usrid';";
+    $sql = "UPDATE profimage SET piIsSet=0 WHERE usrId='$usrid';";
     mysqli_query($conn, $sql);    // esegue la query nel DB
-    // NOTA: non c'è bisogno di prepared statement, perché lo usrid è generato dal DB stesso
+    // NOTA: non c'è bisogno di prepared statement, perché lo usrid è generato dal server stesso
 
 
     // ########## ELIMINAZIONE FILE ##########

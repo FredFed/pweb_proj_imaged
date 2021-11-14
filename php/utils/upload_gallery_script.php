@@ -1,10 +1,6 @@
 <?php
 
 session_start();
-if(!isset($_SESSION["usr"])) {
-    header("location: ../login?err=bad_login");
-    exit();
-}
 require_once './db_conn_handler_script.php';
 require_once './functions_script.php';
 require_once './definitions.php';

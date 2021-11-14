@@ -2,7 +2,6 @@
 function prof_img_button_handler() {
     const inputButton = document.querySelector("#up-img-pic");
     const submitButton = document.querySelector("#sub-img-pic");
-    const profImgFrame = document.querySelector(".change-prof-img-frame");
 
     inputButton.addEventListener("input", function() {
         if(inputButton.value) {
@@ -10,8 +9,9 @@ function prof_img_button_handler() {
         }
     });
 
-    profImgFrame.addEventListener("click", function() {
-        inputButton.click();
+    submitButton.addEventListener("click", function() {
+        if(inputButton.value) submitButton.submit();
+        else inputButton.click();
     });
 }
 

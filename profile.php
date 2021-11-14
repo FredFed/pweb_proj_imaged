@@ -1,12 +1,13 @@
 <?php
 
 session_start();
-if(!isset($_SESSION["usr"])) {
+if(!isset($_SESSION["usrid"])) {
     header("location: ./php/login?err=bad_login");
 }
 require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
 require_once './php/utils/definitions.php';
+$home_path = '.';   // percorso per la cartella principale del server
 
 ?>
 

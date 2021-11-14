@@ -29,7 +29,7 @@ if(isset($_POST["submit_login"])) {
     }
 
     // effettua il login dell'utente a partire dai dati recuperati dal login form
-    if($temperr=login_user($conn, $username, $password) != "success") {
+    if(($temperr=login_user($conn, $username, $password)) != "success") {
         header("location: ../login?".$temperr);
         exit();
     }

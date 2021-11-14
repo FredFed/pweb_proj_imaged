@@ -113,7 +113,7 @@ function load_profile_gallery() {
                 }
                 
                 // se le immagini sono state tutte caricate, setta come completamente caricata
-                if(response.data.length <= load_profile_gallery.postsCount[i]) load_profile_gallery.isGalleryLoaded[i] = true;
+                if(response.data.length < load_profile_gallery.postsCount[i]) load_profile_gallery.isGalleryLoaded[i] = true;
 
                 load_profile_gallery.isInProgress = false;
                 return imageLink;

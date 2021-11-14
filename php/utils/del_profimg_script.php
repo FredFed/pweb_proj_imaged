@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if(!isset($_SESSION["usr"])) {
+if(!isset($_SESSION["usrid"])) {
     header("location: ../login?error=bad_login");
     exit();
 }
@@ -14,7 +14,7 @@ if(isset($_POST["del_prof_img"])) {
     // recupero lo usrid dell'utente
     $usrid = $_SESSION["usrid"];
 
-    if(!delete_prof_img($conn, $usrid)) {
+    if(!delete_prof_img($conn)) {
         header("location: ../../profile?err=del_pimg_fail");
         exit();
     }

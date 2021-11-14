@@ -41,26 +41,27 @@ if(isset($_POST["submit_signup"])) {
         exit();
     }
     // controlla che l'utente non esista già
-    if($temperr=existing_username($conn, $username) !== false) {
+    if(($temperr=existing_username($conn, $username)) !== false) {
         if($temperr==="fatal") header("location: ../signup?err=usr_ex_db_err");
         else header("location: ../signup?err=usr_exists");
         exit();
     }
     // controlla che l'email non esista già
-    if($temperr=existing_email($conn, $email) !== false) {
+    if(($temperr=existing_email($conn, $email)) !== false) {
         if($temperr==="fatal") header("location: ../signup?err=mail_ex_db_err");
         else header("location: ../signup?err=email_exists");
         exit();
     }
 
     // crea l'utente a partire dai dati recuperati dal signup form
-    if($temperr=create_user($conn, $username, $email, $password) !== "success") {
+    if(($temperr=create_user($conn, $username, $email, $password)) !== "success") {
         header("location: ../signup?".$temperr);
         exit();
     }
 
     // reindirizza l'utente alla in seguito al signup
     header("location: ../../profile?signup=success");
+    exit();
 }
 // ... altrimenti, lo reindirizza alla pagina principale
 else {

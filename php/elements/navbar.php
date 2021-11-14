@@ -19,8 +19,8 @@
             </a>
         </div>
 
-        <div class="searchbox-frame" action="searchbox.php" method="POST">
-            <form class="searchbox-form">
+        <div class="searchbox-frame">
+            <form class="searchbox-form" action="searchbox.php" method="POST"> <!-- TODO AGGIUNGERE PATH RICERCA -->
                 <div class="clear-icon-frame"><i class='bx bx-x searchbox-clear'></i></div>
                 <input type="text" class="searchbox" name="searchbox" placeholder="Search">
                 <div class="search-icon-frame"><i class='bx bx-search-alt searchbox-search'></i></div>
@@ -29,7 +29,7 @@
 
         <div class="upload-image-button-frame">
             <a class="upload-link" href="./php/upload">
-                <div class="upload-image-button button" tabindex="1">
+                <div class="upload-image-button button">
                     <i class='bx bx-image-add upload-image-icon'></i>
                     <p class="button-text">Post</p>
                 </div>
@@ -38,7 +38,7 @@
 
         <div class="nav-icons-frame">
             <?php
-                if(isset($_SESSION["usr"])) { echo "
+                if(isset($_SESSION["usrid"])) { echo "
                     <ul class='nav-icons-list'>
                         <li>
                             <a href='#'><i class='bx bx-message nav-icon message-icon'></i></a>
@@ -56,17 +56,17 @@
         <div class="nav-profile-login-frame">
         <?php
                 // se l'utente è loggato, mostra il seguente contenuto
-                if(isset($_SESSION["usr"])) {
+                if(isset($_SESSION["usrid"])) {
                     $usrid = $_SESSION["usrid"];    // recupero l'id utente
                     // recupero i dati relativi alla profile pic dell'utente
-                    $sql_prof_img = "SELECT * FROM profileimg WHERE usrid = $usrid ;";
+                    $sql_prof_img = "SELECT * FROM profimage WHERE usrId = $usrid ;";
                     $res_prof_img = mysqli_fetch_assoc(mysqli_query($conn, $sql_prof_img));
 
                     echo "<div class='nav-profile-frame'>";
                     // se l'utente non ha impostato alcuna immagine del profilo
-                    if($res_prof_img['isset'] == 0)
+                    if($res_prof_img['piIsSet'] == 0)
                         echo "  <a class='nav-profile-image-frame' href='./profile'>
-                                    <img class='nav-profile-img' src='".$DFLT_PROF_IMG."'>
+                                    <img class='nav-profile-img' src='".$DFLT_PROF_IMG."' alt='profile image'>
                                 </a>";
                     // se l'utente ha impostato un'immagine del profilo
                     else {
@@ -77,7 +77,7 @@
                         $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
 
                         echo "  <a class='nav-profile-image-frame' href='./profile'>
-                                    <img class='nav-profile-img' src='./resources/profileimg/profile".$usrid.".".$ext."?".mt_rand()."'>
+                                    <img class='nav-profile-img' src='./resources/profileimg/profile".$usrid.".".$ext."?".mt_rand()."' alt='profile image'>
                                 </a>";
                     }
                     echo "</div>";

@@ -256,7 +256,7 @@ nav {
     position: absolute;
     left: 0%;
     height: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 1/1;
     border-radius: 20px 0 0 20px;
 }
 
@@ -280,7 +280,7 @@ nav {
     position: absolute;
     right: 0%;
     height: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 1/1;
     border-radius: 20px;
     transition:  0.2s linear;
     transform: scale(0);
@@ -376,19 +376,24 @@ nav {
 /* NAV PROFILE IMAGE */
 
 .nav-profile-frame {
-    background-color: #FFFFFF;
     display: flex;
     justify-content: center;
     vertical-align: middle;
     height: 40px;
     width: 40px;
+    margin-right: 10px;
     overflow: hidden;
     border-radius: 50%;
     border: 2px solid #000000;
 }
 
 .nav-profile-image-frame {
+    background-color: rgba(0, 0, 0, 0);
     display: flex;
+}
+
+.nav-profile-image-frame:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .nav-profile-img:hover {
@@ -461,7 +466,9 @@ nav {
 /* PROFILE IMAGE */
 
 .profile-img-frame {
-    background-color: #000000;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     position: relative;
     display: flex;
     justify-content: center;
@@ -470,18 +477,23 @@ nav {
     width: 130px;
     overflow: hidden;
     border-radius: 50%;
-    border: 7px solid #000000;
+    border: 5px solid #000000;
 }
 
 .profile-img-frame:hover {
     cursor: pointer;
 }
 
-.form-img-pic {
+#form-img-pic {
+    width: 100%;
+    height: 100%;
+}
+
+#up-img-pic {
     display: none;
 }
 
-.change-prof-img-frame {
+#sub-img-pic {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
@@ -495,7 +507,7 @@ nav {
     transition: 0.2s ease-out;
 }
 
-.profile-img-frame:hover .change-prof-img-frame {
+.profile-img-frame:hover #sub-img-pic, #sub-img-pic:focus {
     top: 0%;
 }
 
@@ -643,7 +655,7 @@ nav {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    aspect-ratio: 1;
+    aspect-ratio: 1/1;
     position: relative;
     display: flex;
     justify-content: center;

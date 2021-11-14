@@ -2,7 +2,7 @@
 // scarica dal DB un certo numero di foto da mostrare nella galleria del profilo
 
 session_start();
-if(!isset($_SESSION["usr"])) {
+if(!isset($_SESSION["usrid"])) {
     header("location: ../login?err=bad_login");
 }
 
@@ -22,19 +22,21 @@ if(!$galleryInfo) {    // tipo galleria non valido
 
 // scorciatoie per i campi dell'oggetto JSON ricevuto
 $galleryType = $galleryInfo["type"];
+$galleryCount = intval($galleryInfo["count"]);
 $galleryIncrement = intval($galleryInfo["increment"]);
+$current_limit = $galleryCount + $galleryIncrement;
 
 if($galleryType == "public-gallery") {     // immagini per la galleria pubblica
-    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' ORDER BY imgDate DESC;";
+    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgHidden=0 AND imgBlock=0 ORDER BY imgDate ASC LIMIT $current_limit;";
 }
 else if($galleryType == "private-gallery") {   // immagini per la galleria privata
-    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgHidden=1 AND imgBlock=0 ORDER BY imgDate DESC LIMIT '$galleryIncrement';";
+    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgHidden=1 AND imgBlock=0 ORDER BY imgDate ASC LIMIT $current_limit;";
 }
 else if($galleryType == "saved-gallery") {     // immagini per gli elementi salvati
 
 }
 else if($galleryType == "blocked-gallery") {   // immagini attualmente bloccate
-    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgBlock=0 ORDER BY imgDate DESC LIMIT '$galleryIncrement';";
+    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgBlock=0 ORDER BY imgDate ASC LIMIT $current_limit;";
 
 }
 else {  // parametro non valido
@@ -46,7 +48,7 @@ else {  // parametro non valido
 // nota: non c'è bisogno di prepared statement, poiché i parametri sono generati dal server stesso
 $gallery_img_res = mysqli_query($conn, $sql_gallery_img);
 
-if(empty($gallery_img_res)) {   // galleria vuota
+if(mysqli_num_rows($gallery_img_res) == 0) {   // galleria vuota
     $result = new AjaxResponse(null, -1, "empty gallery");
     echo json_encode($result);
     exit();
@@ -55,13 +57,7 @@ if(empty($gallery_img_res)) {   // galleria vuota
 // recupero i risultati della query
 $imgArray = array();
 for($i=0; ($entry = mysqli_fetch_assoc($gallery_img_res)); $i++) {
-    if($i<$galleryIncrement) continue;
-    $currentImage = new Image();
-    $currentImage->buildImage($entry);
-    array_push($imgArray, $currentImage);
-}
-
-while($entry = mysqli_fetch_assoc($gallery_img_res)) {
+    if($i<$galleryCount) continue;
     $currentImage = new Image();
     $currentImage->buildImage($entry);
     array_push($imgArray, $currentImage);

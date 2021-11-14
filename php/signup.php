@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if(isset($_SESSION["usr"])) {
+if(isset($_SESSION["usrid"])) {
     header("location: ../profile");
 }
 
