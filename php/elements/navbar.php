@@ -58,6 +58,7 @@
                 // se l'utente è loggato, mostra il seguente contenuto
                 if(isset($_SESSION["usrid"])) {
                     $usrid = $_SESSION["usrid"];    // recupero l'id utente
+                    $usrname = $_SESSION["usrname"];    // recupero il nome utente
                     // recupero i dati relativi alla profile pic dell'utente
                     $sql_prof_img = "SELECT * FROM profimage WHERE usrId = $usrid ;";
                     $res_prof_img = mysqli_fetch_assoc(mysqli_query($conn, $sql_prof_img));
@@ -65,7 +66,7 @@
                     echo "<div class='nav-profile-frame'>";
                     // se l'utente non ha impostato alcuna immagine del profilo
                     if($res_prof_img['piIsSet'] == 0)
-                        echo "  <a class='nav-profile-image-frame' href='./profile'>
+                        echo "  <a class='nav-profile-image-frame' href='./profile?usr=".$usrname."'>
                                     <img class='nav-profile-img' src='".$DFLT_PROF_IMG."' alt='profile image'>
                                 </a>";
                     // se l'utente ha impostato un'immagine del profilo
@@ -76,7 +77,7 @@
                         $file_meta = glob($filename);
                         $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
 
-                        echo "  <a class='nav-profile-image-frame' href='./profile'>
+                        echo "  <a class='nav-profile-image-frame' href='./profile?usr=".$usrname."'>
                                     <img class='nav-profile-img' src='./resources/profileimg/profile".$usrid.".".$ext."?".mt_rand()."' alt='profile image'>
                                 </a>";
                     }

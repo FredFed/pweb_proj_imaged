@@ -60,8 +60,9 @@ if(isset($_POST["submit_img_gallery"])) {
     // salvo il file all'interno del percorso
     move_uploaded_file($img_tmp_name, $img_path);
 
-    
-    header("location: ../../profile?up_img=success");
+
+    if($usrid) header("location: ../../profile?usr=".$usrid."up_img=success");
+    else header("location: ../../");    // TODO sostituire con il link dell'immagine
     exit();
 }
 else {

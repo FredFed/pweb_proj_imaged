@@ -77,7 +77,7 @@ function load_profile_gallery() {
                         var emptyElement = document.createElement("a");   // genero il placeholder per la galleria vuota
                         emptyElement.setAttribute("href", "./post");
                         emptyElement.setAttribute("class", "gallery-empty button-text");
-                        emptyElement.textContent = "Upload some content!";
+                        emptyElement.textContent = "Upload some content! ";
                         var iconEmpty = document.createElement("i");
                         iconEmpty.setAttribute("class", "bx bx-images");
                         emptyElement.appendChild(iconEmpty);

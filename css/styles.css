@@ -705,10 +705,11 @@ nav {
     border-radius: 20px;
     margin: 0% 20% 0% 20%;
     border: 1px solid var(--grey);
+    transform: scale(0.9);
 }
 
 .gallery-empty:active {
-    transform: scale(0.9);
+    transform: scale(0.8);
 }
 
 

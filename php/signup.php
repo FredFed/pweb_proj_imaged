@@ -2,7 +2,7 @@
 
 session_start();
 if(isset($_SESSION["usrid"])) {
-    header("location: ../profile");
+    header("location: ../profile?usr=".$_SESSION["usrname"]);
 }
 
 ?>

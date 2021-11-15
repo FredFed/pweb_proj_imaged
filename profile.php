@@ -8,6 +8,7 @@ require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
 require_once './php/utils/definitions.php';
 $home_path = '.';   // percorso per la cartella principale del server
+if(isset($_GET["id"])) sleep(3);
 
 ?>
 

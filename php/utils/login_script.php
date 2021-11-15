@@ -35,7 +35,8 @@ if(isset($_POST["submit_login"])) {
     }
 
     // reindirizza l'utente in seguito al login
-    header("location: ../../profile?login=success");    // rimanda l'utente alla HomePage
+    header("location: ../../profile?usr=".$username."&login=success");    // rimanda l'utente alla HomePage
+    exit();
 }
 // ... altrimenti, lo reindirizza al login
 else {

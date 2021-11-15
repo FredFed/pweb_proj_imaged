@@ -23,24 +23,26 @@ if(isset($_POST['submit_prof_img'])) {
     // recupero l'estensione
     $file_ext = get_ext($file_name);
 
+    $usrname = $_SESSION["usrname"];    // recupero il nome utente
+
 
     // ########## GESTIONE ERRORI ##########
 
     // se l'estensione non è consentita, restituisci errore
     if(in_array($file_ext, $allowed_ext) === false) {
-        header("location: ../../profile?err=bad_ext");
+        header("location: ../../profile?usr=".$usrname."&err=bad_ext");
         exit();
     }
 
     // se c'è stato un errore nel caricamente dell'immagine, restituisci errore
     if($file_error === true) {
-        header("location: ../../profile?err=up_err");
+        header("location: ../../profile?usr=".$usrname."&err=up_err");
         exit();
     }
 
     // se la dimensione è maggiore di quella consentita, restituisci errore
     if($file_size > $MAX_IMG_SIZE) {
-        header("location: ../../profile?err=sz_2_lg");
+        header("location: ../../profile?usr=".$usrname."&err=sz_2_lg");
         exit();
     }
 
@@ -57,7 +59,7 @@ if(isset($_POST['submit_prof_img'])) {
     $image_path = '../../resources/profileimg/'.$image_name;
 
     // elimino la vecchia immagine di profilo eventualmente presente
-    if(!delete_prof_img($conn)) header("location: ../../profile?err=no_repl");
+    if(!delete_prof_img($conn)) header("location: ../../profile?usr=".$usrname."&err=no_repl");
 
     // comunico al DB che l'utente ha impostato un'immagine del profilo
     update_prof_img($conn);
@@ -69,17 +71,17 @@ if(isset($_POST['submit_prof_img'])) {
     $temperr=square_image($image_path, $image_path, $file_ext);
     if($temperr!="success") {   // se il processo non è andato a buon fine...
         unlink($image_path);    // rimuove l'immagine appena salvata
-        header("location: ../../profile?".$temperr);    // reindirizza + mostra errore
+        header("location: ../../profile?usr=".$usrname."&".$temperr);    // reindirizza + mostra errore
         exit();
     } 
 
     // il file è stato caricato; reindirizzo l'utente
-    header("location: ../../profile?up_pimg=success");
+    header("location: ../../profile?usr=".$usrname."&up_pimg=success");
     exit();
 }
 // altrimenti reindirizzalo al suo profilo
 else {
-    header("location: ../../profile");
+    header("location: ../../profile?usr=".$usrname);
     exit();
 }
 ?>

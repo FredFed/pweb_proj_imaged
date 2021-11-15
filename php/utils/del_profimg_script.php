@@ -13,19 +13,20 @@ if(isset($_POST["del_prof_img"])) {
 
     // recupero lo usrid dell'utente
     $usrid = $_SESSION["usrid"];
+    $usrname = $_SESSION["usrname"];
 
     if(!delete_prof_img($conn)) {
-        header("location: ../../profile?err=del_pimg_fail");
+        header("location: ../../profile?usr=".$usrname."&err=del_pimg_fail");
         exit();
     }
     else {
-        header("location: ../../profile?del_pimg=success");
+        header("location: ../../profile?usr=".$usrname."&res=success");
         exit();
     }
 }
 // altrimenti reindirizzalo al suo profilo
 else {
-    header("location: ../../profile");
+    header("location: ../../profile?usr=".$usrname);
     exit();
 }
 
