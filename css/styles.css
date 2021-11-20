@@ -21,11 +21,24 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Quicksand', 'Raleway', 'Ubuntu', 'Sans-serif';
+
 }
 
 header {
     background-color: var(--header-bg-color);
     position: relative;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+footer {
+    background-color: var(--dark-bg-color);
+    position: relative;
+    display: inline-flex;
+    justify-self: center;
     width: 100%;
 }
 
@@ -67,7 +80,6 @@ button, input[type="submit"], input[type="reset"] {
 }
 
 .button-text, .reverse-button-text, button {
-    font-family: 'Quicksand';
     font-size: var(--button-text-size);
     color: #FFFFFF;
     padding-bottom: 3px;
@@ -77,6 +89,17 @@ button, input[type="submit"], input[type="reset"] {
     color: var(--button-color);
 }
 
+.err-box {
+    flex-basis: 100%;
+    text-align: left;
+    color: darkred;
+    display: block;
+}
+
+.signature {
+    color: var(--grey);
+}
+
 
 
 /* ########## NAVIGATION BAR ########## */
@@ -84,6 +107,7 @@ button, input[type="submit"], input[type="reset"] {
 nav {
     background-color: var(--header-bg-color);
     position: sticky;
+    flex-basis: 100%;
     top: 0%;
     z-index: 1;
     height: var(--nav-height);
@@ -97,7 +121,6 @@ nav {
 }
 
 .nav-frame {
-    font-family: 'Quicksand', 'Ubuntu', 'Sans-serif';
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
@@ -187,7 +210,7 @@ nav {
 }
 
 .logo {
-    font-family: 'Quicksand', 'Ubuntu', 'Sans-serif';
+    font-family: 'Quicksand', 'Raleway', 'Ubuntu', 'Sans-serif';
     font-size: 40px;
     font-weight: 600;
     letter-spacing: 1px;
@@ -454,8 +477,11 @@ nav {
 .profile-frame {
     position: relative;
     display: flex;
-    width: 100%;
+    justify-self: center;
+    flex-basis: 100%;
     height: 100%;
+    margin-top: 30px;
+    padding: 0% 12% 10px;
     box-shadow: var(--standard-shadow);
 }
 
@@ -478,10 +504,6 @@ nav {
     overflow: hidden;
     border-radius: 50%;
     border: 5px solid #000000;
-}
-
-.profile-img-frame:hover {
-    cursor: pointer;
 }
 
 #form-img-pic {
@@ -518,6 +540,30 @@ nav {
 .profile-img-frame:active .change-prof-img-icon {
     color: var(--grey);
     transform: scale(0.9);
+}
+
+/* NAME AND DESCRIPTION */
+
+.profile-name {
+    font-family: 'Raleway', sans-serif;
+    font-size: 2.5em;
+    font-weight: 500;
+    color: #EEEEEE;
+    margin: 20px 20px 10px;
+}
+
+.profile-desc {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1em;
+    color: #EEEEEE;
+    margin: 10px 20px 20px;
+}
+
+.lvl-icon {
+    font-size: var(--icons-size);
+    color: #ffbb00;
+    top: 2px;
+    margin-left: 5px;
 }
 
 

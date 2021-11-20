@@ -16,17 +16,17 @@ if(isset($_POST["del_prof_img"])) {
     $usrname = $_SESSION["usrname"];
 
     if(!delete_prof_img($conn)) {
-        header("location: ../../profile?usr=".$usrname."&err=del_pimg_fail");
+        header("location: ../../profile?user=".$usrname."&err=del_pimg_fail");
         exit();
     }
     else {
-        header("location: ../../profile?usr=".$usrname."&res=success");
+        header("location: ../../profile?user=".$usrname."&res=success");
         exit();
     }
 }
 // altrimenti reindirizzalo al suo profilo
 else {
-    header("location: ../../profile?usr=".$usrname);
+    header("location: ../../profile?user=".$usrname);
     exit();
 }
 

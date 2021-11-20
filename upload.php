@@ -22,24 +22,37 @@ include_once './php/utils/definitions.php';
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <script src="./js/ajax/ajax_utils.js"></script>
-        <script src="./js/searchbox_clear.js"></script>
-        <script src="./js/navbar_scroll.js"></script>
         <title>Imaged</title>
     </head>
 
     <body>
+
         <header>
-            <?php include_once './php/elements/navbar.php' ?>   <!-- include il codice della navbar -->
+            <!-- Header bar vuota -->
         </header>
 
         <section id="page_main_section">
 
             <!-- MAIN DIV -->
 
+            <div class="upload_to_gallery">
+                <form action="./php/utils/upload_gallery_script.php" method="POST" enctype="multipart/form-data">
+                    <input type="text" name="img_title" placeholder="Title...">
+                    <input type="text" name="img_desc" placeholder="Description...">
+                    <input type="text" name="img_tags" placeholder="Tags...">
+                    <input type="checkbox" name="img_ls" value="landscape">
+                    <label id="img_is_landscape" for="img_ls">Landscape mode</label></br>
+                    <input type="checkbox" name="img_hidden" value="hidden">
+                    <label id="img_is_hidden" for="img_hidden">Private image</label></br>
+                    <input type="file" name="gallery_img" accept="image/jpeg, image/png" required>
+                    <button type="submit" name="submit_img_gallery">POST</button>
+                </form>
+            </div>
+
         </section>
 
         <footer>
-            <?php include_once './php/elements/footer.php' ?>   <!-- include il codice del footer -->
+            <!-- Footer vuoto -->
         </footer>
 
     </body>

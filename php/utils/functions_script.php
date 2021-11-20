@@ -97,7 +97,7 @@ function create_user($conn, $username, $email, $password) {
     // ########## CREAZIONE UTENTE ##########
 
     // comando SQL INSERT
-    $sql = "INSERT INTO users (usrName, usrPswd, usrMail, usrDate) VALUES (?, ?, ?, now());";
+    $sql = "INSERT INTO users (usrName, usrPswd, usrMail, usrDate, usrLvl) VALUES (?, ?, ?, now(), 0);";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
@@ -138,13 +138,13 @@ function create_user($conn, $username, $email, $password) {
     session_start();    // avvia la sessione
     $_SESSION["usrid"] = $user_data["usrId"];  // recupera l'id utente
     $_SESSION["usrname"] = $user_data["usrName"];  // recupera lo username
-    $_SESSION["mail"] = $user_data["usrMail"];    //recupera l'email
+    $_SESSION["usrmail"] = $user_data["usrMail"];    //recupera l'email
+    $_SESSION["usrlvl"] = $user_data["usrLvl"];     // recupera il livello di privilegio dell'utente
     return("success");
 }
 
 // effettua il login dell'utente a partire dai dati recuperati dal login form
 function login_user($conn, $username, $password) {
-    // $user_data=false;    // conterrà i dati dell'utente (se questo esiste)
 
     // se lo username fornito è una mail valida, cerca l'utente per mail
     if(invalid_email($username) === false) $user_data = existing_email($conn, $username);
@@ -166,7 +166,8 @@ function login_user($conn, $username, $password) {
     session_start();    // avvia la sessione
     $_SESSION["usrid"] = $user_data["usrId"];  // recupera l'id utente
     $_SESSION["usrname"] = $user_data["usrName"];  // recupera lo username
-    $_SESSION["mail"] = $user_data["usrMail"];    //recupera l'email
+    $_SESSION["usrmail"] = $user_data["usrMail"];    //recupera l'email
+    $_SESSION["usrlvl"] = $user_data["usrLvl"];     // recupera il livello di privilegio dell'utente
     return("success");
 }
 
@@ -404,5 +405,54 @@ function drop_ext($filename) {
     $result = explode('.', $filename);
 
     return($result[0]);
+}
+
+
+// restituisce il numero di post dell'utente
+function posts_number($conn, $usrid) {
+    $sql = "SELECT COUNT(*) AS imgNum FROM gallery WHERE usrId = ? ;";
+    $stmt = mysqli_stmt_init($conn);
+    if(!mysqli_stmt_prepare($stmt, $sql)) {
+        return(-1);
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $usrid);
+    mysqli_stmt_execute($stmt);
+    $query_res = mysqli_stmt_get_result($stmt); // recupero risultati query
+    if(!$query_res) return -1;
+    $usr_row = mysqli_fetch_assoc($query_res);
+    if(!$usr_row) return -1;
+
+    return($usr_row["imgNum"]);
+}
+
+
+// restituisce il "rank" dell'utente sulla base del numero di post pubblicati
+function user_rank($post_num) {
+    if($post_num < 0) return -1;
+    else if ($post_num >= 0 && $post_num < 10) return("new");
+    else if ($post_num >= 10 && $post_num < 50) return("novice");
+    else if ($post_num >= 50 && $post_num < 100) return("regular");
+    else if ($post_num >= 100 && $post_num < 500) return("veteran");
+    else if ($post_num >= 500) return("legend");
+}
+
+
+// restituisce il numero di post dell'utente TODO sostituire con la versione corretta
+function upvotes_number($conn, $usrid) {
+    $sql = "SELECT COUNT(*) AS imgNum FROM gallery WHERE usrId = ? ;";
+    $stmt = mysqli_stmt_init($conn);
+    if(!mysqli_stmt_prepare($stmt, $sql)) {
+        return(-1);
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $usrid);
+    mysqli_stmt_execute($stmt);
+    $query_res = mysqli_stmt_get_result($stmt); // recupero risultati query
+    if(!$query_res) return -1;
+    $usr_row = mysqli_fetch_assoc($query_res);
+    if(!$usr_row) return -1;
+
+    return($usr_row["imgNum"]);
 }
 ?>

@@ -28,7 +28,7 @@
         </div>
 
         <div class="upload-image-button-frame">
-            <a class="upload-link" href="./php/upload">
+            <a class="upload-link" href="./upload">
                 <div class="upload-image-button button">
                     <i class='bx bx-image-add upload-image-icon'></i>
                     <p class="button-text">Post</p>
@@ -66,7 +66,7 @@
                     echo "<div class='nav-profile-frame'>";
                     // se l'utente non ha impostato alcuna immagine del profilo
                     if($res_prof_img['piIsSet'] == 0)
-                        echo "  <a class='nav-profile-image-frame' href='./profile?usr=".$usrname."'>
+                        echo "  <a class='nav-profile-image-frame' href='./profile?user=".$usrname."'>
                                     <img class='nav-profile-img' src='".$DFLT_PROF_IMG."' alt='profile image'>
                                 </a>";
                     // se l'utente ha impostato un'immagine del profilo
@@ -77,7 +77,7 @@
                         $file_meta = glob($filename);
                         $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
 
-                        echo "  <a class='nav-profile-image-frame' href='./profile?usr=".$usrname."'>
+                        echo "  <a class='nav-profile-image-frame' href='./profile?user=".$usrname."'>
                                     <img class='nav-profile-img' src='./resources/profileimg/profile".$usrid.".".$ext."?".mt_rand()."' alt='profile image'>
                                 </a>";
                     }

@@ -1,14 +1,45 @@
 <?php
 
 session_start();
-if(!isset($_SESSION["usrid"])) {
-    header("location: ./php/login?err=bad_login");
-}
 require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
 require_once './php/utils/definitions.php';
-$home_path = '.';   // percorso per la cartella principale del server
-if(isset($_GET["id"])) sleep(3);
+
+// controllo se l'URL rappresenta un profilo valido
+if(!isset($_GET["user"])) header("location: ./php/page_not_found"); // bad URL
+else $profileName = $_GET["user"];
+
+// controllo se il profilo appartiene all'utente loggato
+$isOwnProfile = false;
+if(isset($_SESSION["usrid"])) {
+    $usrid = $_SESSION["usrid"];
+    $usrname = $_SESSION["usrname"];
+    if($profileName == $usrname) {
+        $isOwnProfile = true;
+        $profileId = $usrid;
+        $profileLvl = $_SESSION["usrlvl"];
+    }
+}
+
+if($isOwnProfile !== true) {
+    $sql = "SELECT * FROM users WHERE usrName = ? ;";  // comando SQL SELECT
+    $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
+    if(!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ./php/page_not_found");   // DB error
+    }
+    mysqli_stmt_bind_param($stmt, "s", $profileName); // binding tra username e statement
+    mysqli_stmt_execute($stmt); // eseguo lo statement
+    $user_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt)); // recupero risultati query
+    if(!$user_data) header("location: ./php/page_not_found");   // l'utente non esiste
+    else {
+        $profileId = $user_data["usrId"];
+        $profileLvl = $user_data["usrLvl"];
+    }
+}
+
+if($profileLvl == 0) $badge = "";  // l'utente base non ha alcun badge
+else if($profileLvl == 1) $badge = "<i class='bx bx-crown lvl-icon'></i>";   // badge moderatore
+else if($profileLvl == 2) $badge = "<i class='bx bxs-crown lvl-icon'></i>";  // badge amministratore
 
 ?>
 
@@ -22,6 +53,7 @@ if(isset($_GET["id"])) sleep(3);
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <script src="./js/ajax/ajax_utils.js"></script>
         <script src="./js/prof_img_button_handler.js"></script>
@@ -32,43 +64,30 @@ if(isset($_GET["id"])) sleep(3);
     </head>
     <body>
         <header>
-            <?php include_once './php/elements/navbar.php' ?>   <!-- include il codice della navbar -->
-            <?php include_once './php/elements/profile_frame.php' ?>    <!-- include il codice del frame profilo -->
+            <?php
+                include_once './php/elements/navbar.php';   // include il codice della navbar
+                include_once './php/elements/profile_frame.php';    // include il codice del frame profilo
+            ?>
         </header>
 
         <section id="page_main_section">
             
-                    <!-- MAIN DIV -->
+                    <!-- MAIN SECTION -->
             
             <div class="gallery-frame">
                 <div class="gallery-section">
-                    <div class="gallery-selector-frame">
-                        <button id="public-gallery-selector" class="gallery-selector" type="button">
-                            <i class='bx bx-world gallery-selector-icon'></i>
-                            Public
-                        </button>
-                        <button id="private-gallery-selector" class="gallery-selector" type="button">
-                            <i class='bx bxs-hide gallery-selector-icon'></i>
-                            Hidden
-                        </button>
-                        <button id="saved-gallery-selector" class="gallery-selector" type="button">
-                            <i class='bx bxs-bookmark-alt gallery-selector-icon'></i>
-                            Saved
-                        </button>
-                    </div>
-                    <div class="gallery-container">
-                        <div class="gallery-delimiter-upper"></div>
-                        <div id="public-gallery" class="gallery"></div>
-                        <div id="private-gallery" class="gallery"></div>
-                        <div id="saved-gallery" class="gallery"></div>
-                    </div>
+                    <!-- include il codice della galleria da mostrare -->
+                    <?php
+                        if($isOwnProfile === true) include_once './php/elements/personal_gallery.php';
+                        else include_once './php/elements/guest_gallery.php';
+                    ?>
                 </div>
             </div>
                     <!-- END MAIN DIV -->
         </section>
         
         <footer>
-        <!-- FOOTER CONTENT -->
+            <?php include_once './php/elements/footer.php' ?>   <!-- include il codice del footer -->
         </footer>
 
     </body>

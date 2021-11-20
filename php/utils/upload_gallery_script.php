@@ -26,18 +26,18 @@ if(isset($_POST["submit_img_gallery"])) {
 
     // se l'estensione non è consentita, restituisci errore
     if(in_array($img_ext, $allowed_ext) === false) {
-        header("location: ../upload?err=bad_ext");
+        header("location: ../../upload?err=bad_ext");
         exit();
     }
 
     // se c'è stato un errore nel caricamente dell'immagine, restituisci errore
     if($img_error === true) {
-        header("location: ../upload?err=up_err");
+        header("location: ../../upload?err=up_err");
         exit();
     }
 
     if($img_size > $MAX_IMG_SIZE) {
-        header("location: ../upload?err=sz_2_lg");
+        header("location: ../../upload?err=sz_2_lg");
         exit();
     }
 
@@ -48,12 +48,15 @@ if(isset($_POST["submit_img_gallery"])) {
     // ########## AGGIUNTA ENTRY AL DB #########
 
     // stabilisco se l'utente è loggato o meno
-    if(isset($_SESSION["usrid"])) $usrid = $_SESSION["usrid"];
+    if(isset($_SESSION["usrid"])) {
+        $usrid = $_SESSION["usrid"];
+        $usrname = $_SESSION["usrname"];
+    }
     else $usrid = NULL;
 
     // aggiorno il database con l'entry relativa all'immagine
     if(!upload_gallery_img($conn, $usrid, $img_final_name, $img_title, $img_desc, $img_tags, $img_ls, $img_hddn)) {
-        header("location: ../upload?err=up_img_err");
+        header("location: ../../upload?err=up_img_err");
         exit();
     }
 
@@ -61,11 +64,11 @@ if(isset($_POST["submit_img_gallery"])) {
     move_uploaded_file($img_tmp_name, $img_path);
 
 
-    if($usrid) header("location: ../../profile?usr=".$usrid."up_img=success");
+    if($usrid) header("location: ../../profile?user=".$usrname."&up_img=success");
     else header("location: ../../");    // TODO sostituire con il link dell'immagine
     exit();
 }
 else {
-    header("location: ../../profile");
+    header("location: ../../");
     exit();
 }
