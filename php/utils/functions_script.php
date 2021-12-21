@@ -182,7 +182,6 @@ function get_ext($file_name) {
 
 // imposta l'entry relativa all'immagine del profilo dell'utente a 1
 function update_prof_img($conn) {
-    session_start();
     if(isset($_SESSION["usrid"])) $usrid = $_SESSION["usrid"];
     else return false;  // l'utente non è loggato correttamente
 
@@ -197,7 +196,6 @@ function update_prof_img($conn) {
 // registra la cancellazione dell'immagine profilo dell'utente e aggiorna il DB
 function delete_prof_img($conn) {
     // ######### AGGIORNAMENTO DB ##########
-    session_start();
     if(isset($_SESSION["usrid"])) $usrid = $_SESSION["usrid"];
     else return false;  // l'utente non è loggato correttamente
 
@@ -209,7 +207,7 @@ function delete_prof_img($conn) {
 
     // ########## ELIMINAZIONE FILE ##########
     // recupero il nome dell'immagine del profilo
-    $filename = "../../resources/profileimg/profile".$usrid."*";
+    $filename = "../../resources/users/".$usrid."/profile".$usrid."*";
 
     // recupero l'estensione prendendo il primo match della funzione "glob" e tenendo la parte finale
     $file_meta = glob($filename);   // avvia la ricerca nel percorso specificato
@@ -217,7 +215,7 @@ function delete_prof_img($conn) {
     $file_ext = get_ext($file_meta[0]);     // recupero l'estensione del primo match della ricerca glob (il "closer match")
 
     // costruisco il path completo
-    $file_path =  "../../resources/profileimg/profile".$usrid.".".$file_ext;
+    $file_path =  "../../resources/users/".$usrid."/profile".$usrid.".".$file_ext;
 
     if(!unlink($file_path)) return false;
 
@@ -410,7 +408,7 @@ function drop_ext($filename) {
 
 // restituisce il numero di post dell'utente
 function posts_number($conn, $usrid) {
-    $sql = "SELECT COUNT(*) AS imgNum FROM gallery WHERE usrId = ? ;";
+    $sql = "SELECT COUNT(*) AS imgNum FROM gallery WHERE usrId = ? AND imgBlock=0 AND imgHidden=0 ;";
     $stmt = mysqli_stmt_init($conn);
     if(!mysqli_stmt_prepare($stmt, $sql)) {
         return(-1);
@@ -454,5 +452,27 @@ function upvotes_number($conn, $usrid) {
     if(!$usr_row) return -1;
 
     return($usr_row["imgNum"]);
+}
+
+function check_key($conn, $key) {
+    $sql = "SELECT * FROM keyvalues";
+    $result = mysqli_query($conn, $sql);
+
+    while($row = mysqli_fetch_assoc($result)) {
+        if($row['keyValue'] == $key) return false;
+    }
+
+    return true;
+}
+
+function generate_key($conn) {
+    $key_length = 8;
+    $alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    do {
+        $new_key = substr(str_shuffle($alphabet), 0, $key_length);
+    }while(!check_key($conn, $new_key));
+
+    return $new_key;
 }
 ?>

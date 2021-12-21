@@ -1,4 +1,4 @@
-<div class="profile-frame">
+<section class="profile-frame">
     <div class="profile-img-section">
         <?php   // ########## SCRIPT che mostra l'immagine di profilo corretta ##########
         
@@ -12,11 +12,12 @@
             // se l'utente ha impostato un'immagine del profilo
             else {
                 // recupero il nome dell'immagine del profilo
-                $filename = "./resources/profileimg/profile".$profileId."*";
+                $filename = "./resources/users/".$profileId."/profile".$profileId."*";
                 // recupero l'estensione prendendo il primo match della funzione "glob" e tenendo la parte finale
                 $file_meta = glob($filename);
                 $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
-                echo "  <div class='profile-img-frame' style='background-image: url(./resources/profileimg/profile".$profileId.".".$ext."?".mt_rand().");'>";
+                echo "  <div class='profile-img-frame'
+                             style='background-image: url(./resources/users/".$profileId."/profile".$profileId.".".$ext."?".mt_rand().");'>";
             }
                 if($isOwnProfile) {
                     // visualizza icona per cambiare immagine profilo
@@ -49,4 +50,4 @@
         include_once './php/elements/error_messages.php';
     ?>
 
-</div>
+</section>

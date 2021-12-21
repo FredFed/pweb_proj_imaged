@@ -8,11 +8,13 @@ function navbar_scroll() {
         if(this.scrollY > 10) navbar.classList.add("active-nav");
         else navbar.classList.remove("active-nav");
 
-        if(this.scrollY > header.offsetHeight) {
-            galleryHeader.classList.add("gallery-selector-frame-scrolled");
-        }
-        else {
-            galleryHeader.classList.remove("gallery-selector-frame-scrolled");
+        if(galleryHeader) {
+            if(this.scrollY > header.offsetHeight) {
+                galleryHeader.classList.add("gallery-selector-frame-scrolled");
+            }
+            else {
+                galleryHeader.classList.remove("gallery-selector-frame-scrolled");
+            }
         }
     });
 }

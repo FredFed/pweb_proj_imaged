@@ -72,13 +72,13 @@
                     // se l'utente ha impostato un'immagine del profilo
                     else {
                         // recupero il nome dell'immagine del profilo
-                        $filename = "./resources/profileimg/profile".$usrid."*";
+                        $filename = "./resources/users/".$usrid."/profile".$usrid."*";
                         // recupero l'estensione prendendo il primo match della funzione "glob" e tenendo la parte finale
                         $file_meta = glob($filename);
                         $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
 
                         echo "  <a class='nav-profile-image-frame' href='./profile?user=".$usrname."'>
-                                    <img class='nav-profile-img' src='./resources/profileimg/profile".$usrid.".".$ext."?".mt_rand()."' alt='profile image'>
+                                    <img class='nav-profile-img' src='./resources/users/".$usrid."/profile".$usrid.".".$ext."?".mt_rand()."' alt='profile image'>
                                 </a>";
                     }
                     echo "</div>";

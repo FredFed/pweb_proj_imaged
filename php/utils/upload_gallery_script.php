@@ -36,16 +36,16 @@ if(isset($_POST["submit_img_gallery"])) {
         exit();
     }
 
+    // se la dimensione è eccessiva, restituisci errore
     if($img_size > $MAX_IMG_SIZE) {
         header("location: ../../upload?err=sz_2_lg");
         exit();
     }
 
-    // genero un numero casuale eliminando il punto decimale presente in esso (mediante regex) e appendo l'estensione
-    $img_final_name = (preg_replace("/[.]/", "", uniqid("", true))).".".$img_ext;
-    $img_path = "../../resources/gallery/".$img_final_name;
+    // ########## SALVATAGGIO E AGGIUNTA ENTRY AL DB #########
 
-    // ########## AGGIUNTA ENTRY AL DB #########
+    // genero una stringa unica casuale e appendo l'estensione per creare il nome del file
+    $img_final_name = generate_key($conn).'.'.$img_ext;
 
     // stabilisco se l'utente è loggato o meno
     if(isset($_SESSION["usrid"])) {
@@ -53,6 +53,10 @@ if(isset($_POST["submit_img_gallery"])) {
         $usrname = $_SESSION["usrname"];
     }
     else $usrid = NULL;
+
+    // ricavo il path finale dell'immagine
+    if($usrid==NULL) $img_path = "../../resources/users/default/".$img_final_name;
+    else $img_path = "../../resources/users/".$usrid."/gallery/".$img_final_name;
 
     // aggiorno il database con l'entry relativa all'immagine
     if(!upload_gallery_img($conn, $usrid, $img_final_name, $img_title, $img_desc, $img_tags, $img_ls, $img_hddn)) {
@@ -63,7 +67,7 @@ if(isset($_POST["submit_img_gallery"])) {
     // salvo il file all'interno del percorso
     move_uploaded_file($img_tmp_name, $img_path);
 
-
+    // ritorno alla galleria dell'utente (se l'utente è loggato) o alla homepage
     if($usrid) header("location: ../../profile?user=".$usrname."&up_img=success");
     else header("location: ../../");    // TODO sostituire con il link dell'immagine
     exit();

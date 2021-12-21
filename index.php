@@ -22,6 +22,7 @@ include_once './php/utils/definitions.php';
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <script src="./js/ajax/ajax_utils.js"></script>
+        <script src="./js/loaders/homepage_gallery_loader.js"></script>
         <script src="./js/searchbox_clear.js"></script>
         <script src="./js/navbar_scroll.js"></script>
         <title>Imaged</title>
@@ -35,6 +36,13 @@ include_once './php/utils/definitions.php';
         <section id="page_main_section">
 
             <!-- MAIN DIV -->
+
+            <div class="gallery-frame">
+                <div class="gallery-section">
+                    <!-- include il codice della galleria da mostrare -->
+                    <?php include_once './php/elements/homepage_gallery.php'; ?>
+                </div>
+            </div>
 
         </section>
 

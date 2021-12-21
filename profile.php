@@ -56,7 +56,7 @@ else if($profileLvl == 2) $badge = "<i class='bx bxs-crown lvl-icon'></i>";  // 
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <script src="./js/ajax/ajax_utils.js"></script>
-        <script src="./js/prof_img_button_handler.js"></script>
+        <?php if($isOwnProfile === true) echo "<script src='./js/prof_img_button_handler.js'></script>"; ?>
         <script src="./js/searchbox_clear.js"></script>
         <script src="./js/navbar_scroll.js"></script>
         <script src="./js/loaders/profile_gallery_loader.js"></script>
@@ -77,10 +77,7 @@ else if($profileLvl == 2) $badge = "<i class='bx bxs-crown lvl-icon'></i>";  // 
             <div class="gallery-frame">
                 <div class="gallery-section">
                     <!-- include il codice della galleria da mostrare -->
-                    <?php
-                        if($isOwnProfile === true) include_once './php/elements/personal_gallery.php';
-                        else include_once './php/elements/guest_gallery.php';
-                    ?>
+                    <?php include_once './php/elements/profile_gallery.php'; ?>
                 </div>
             </div>
                     <!-- END MAIN DIV -->

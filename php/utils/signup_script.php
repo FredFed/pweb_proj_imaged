@@ -59,6 +59,11 @@ if(isset($_POST["submit_signup"])) {
         exit();
     }
 
+    // crea le cartelle che conterranno i file dell'utente
+    session_start();
+    $usrid = $_SESSION['usrid'];
+    mkdir("../../resources/users/".$usrid."/gallery", 0777, true);
+
     // reindirizza l'utente alla in seguito al signup
     header("location: ../../profile?user=".$username."&signup=success");
     exit();

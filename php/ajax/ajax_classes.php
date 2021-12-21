@@ -6,11 +6,13 @@ require_once("../utils/functions_script.php");
 // classe utilizzata per inviare risposte a richieste Ajax
 class AjaxResponse {
     public $data;
+    public $isOwnGallery;
     public $errorCode;
     public $errorMsg;
 
-    function AjaxResponse($data = null, $errorCode = -1, $errorMsg = "server error") {
+    function AjaxResponse($data = null, $isOwnGallery = false, $errorCode = -1, $errorMsg = "server error") {
         $this->data = $data;
+        $this->isOwnGallery = $isOwnGallery;
         $this->errorCode = $errorCode;
         $this->errorMsg = $errorMsg;
     }
@@ -18,6 +20,7 @@ class AjaxResponse {
 
 // classe utilizzata per trasferire le immagini alla galleria del client
 class Image {
+    public $imgAuthor;     // autore dell'immagine
     public $imgName;   // nome dell'immagine
     public $imgCrop;    // nome immagine cropped
     public $imgTitle;   // titolo dell'immagine
@@ -29,6 +32,7 @@ class Image {
     public $imgDate;    // data di caricamento dell'immagine
 
     function Image() {
+        $this->imgAuthor=null;
         $this->imgName=null;
         $this->imgCrop=null;
         $this->imgTitle=null;
@@ -43,6 +47,8 @@ class Image {
 
     function buildImage($imgResult) {
         // build an Image object from the DB result given
+        if($imgResult["usrId"] == null) $this->imgAuthor = "default";
+        else $this->imgAuthor = $imgResult["usrId"];
         $this->imgName = $imgResult["imgName"];
         $this->imgCrop = drop_ext($this->imgName)."_crop.".get_ext($this->imgName);
         $this->imgTitle = $imgResult["imgTitle"];

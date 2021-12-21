@@ -22,9 +22,9 @@ if(isset($_POST['submit_prof_img'])) {
 
     // recupero l'estensione
     $file_ext = get_ext($file_name);
+    if($file_ext == 'jpg') $file_ext = 'jpeg';
 
     $usrname = $_SESSION["usrname"];    // recupero il nome utente
-
 
     // ########## GESTIONE ERRORI ##########
 
@@ -56,7 +56,7 @@ if(isset($_POST['submit_prof_img'])) {
     $image_name = "profile".$usrid.".".$file_ext;
 
     // specifico un percorso finale per il file
-    $image_path = '../../resources/profileimg/'.$image_name;
+    $image_path = '../../resources/users/'.$usrid.'/'.$image_name;
 
     // elimino la vecchia immagine di profilo eventualmente presente
     if(!delete_prof_img($conn)) header("location: ../../profile?user=".$usrname."&err=no_repl");
