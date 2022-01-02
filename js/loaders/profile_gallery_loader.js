@@ -163,9 +163,10 @@ function load_profile_gallery() {
                 
             }
             
-            // se le immagini sono state tutte caricate, setta come completamente caricata
+            // se le immagini sono state tutte caricate, setta la galleria come completamente caricata
             if(response.data.length == 0) {     // TODO implementare galleria saved
                 load_profile_gallery.isGalleryLoaded[currentGalleryIndex] = true;
+                // se tutte le gallerie sono state completamente caricate, distruggi l'observer
                 if( load_profile_gallery.isGalleryLoaded[0] &&
                     load_profile_gallery.isGalleryLoaded[1])
                         galleryObs.unobserve(galleryDelimiter);

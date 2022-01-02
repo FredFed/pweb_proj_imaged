@@ -88,8 +88,13 @@ function load_homepage_gallery() {
                 var imageAuth = document.createElement("a");    // genero l'autore con link per il suo profilo
                 imageAuth.setAttribute("class", "gallery-image-auth");  // imposto la classe autore
                 imageAuth.setAttribute("href", "./profile?user=" + currentImage.imgAuthorName); // imposto il link per il profilo
-                imageAuth.textContent = currentImage.imgAuthorName;  // recupero l'autore dell'immagine
+                imageAuth.textContent = "Posted by: " + currentImage.imgAuthorName;  // recupero l'autore dell'immagine
                 imageInfo.appendChild(imageAuth);   // appendo la descrizione allo slider dell'info
+
+                // richiesta Ajax GET che comunica l'id immagine e restituisce informazioni su like/save
+                ajaxUtils.ajaxSendRequest("./php/ajax/image_data_getter.php?id=" + currentImage.imgId, function(response) {
+                    // TODO elaborare
+                });
 
                 var likeButton = document.createElement("button");     // genero il pulsante
                 likeButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
@@ -109,9 +114,7 @@ function load_homepage_gallery() {
                 imageFrame.appendChild(imageInfo);  // setto lo slider info come figlio di imageFrame
                 gallery.appendChild(imageFrame);    // inserisco l'immagine nella galleria
             }
-            
-            // se le immagini sono state tutte caricate, setta come completamente caricata
-            //if(response.data.length == 0) load_homepage_gallery.isGalleryLoaded = true;
+
             // se le immagini sono state tutte caricate, distruggi l'observer
             if(response.data.length == 0) galleryObs.unobserve(galleryDelimiter);
 

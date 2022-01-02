@@ -47,17 +47,28 @@ if(isset($_SESSION["usrid"]))
 
 
 if($galleryType == "public-gallery") {     // immagini per la galleria pubblica
-    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgHidden=0 AND imgBlock=0 ORDER BY imgDate DESC LIMIT $current_limit;";
+    $sql_gallery_img = "SELECT * 
+                        FROM gallery 
+                        WHERE usrId='$usrid' AND imgHidden=0 AND imgBlock=0 
+                        ORDER BY imgDate DESC LIMIT $current_limit;";
 }
 else if($galleryType == "private-gallery") {   // immagini per la galleria privata
-    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgHidden=1 AND imgBlock=0 ORDER BY imgDate DESC LIMIT $current_limit;";
+    $sql_gallery_img = "SELECT * 
+                        FROM gallery 
+                        WHERE usrId='$usrid' AND imgHidden=1 AND imgBlock=0 
+                        ORDER BY imgDate DESC LIMIT $current_limit;";
 }
 else if($galleryType == "saved-gallery") {     // immagini per gli elementi salvati
-    $sql_gallery_img = "SELECT * FROM gallery INNER JOIN saved ON gallery.imgId=saved.imgId 
-        WHERE saverId='$usrid' AND imgHidden=0 AND imgBlock=0 ORDER BY savingDate DESC LIMIT $current_limit;";
+    $sql_gallery_img = "SELECT * 
+                        FROM gallery INNER JOIN saved ON gallery.imgId=saved.imgId 
+                        WHERE saved.usrId='$usrid' AND gallery.imgHidden=0 AND gallery.imgBlock=0 
+                        ORDER BY saved.saveDate DESC LIMIT $current_limit;";
 }
 else if($galleryType == "blocked-gallery") {   // immagini attualmente bloccate
-    $sql_gallery_img = "SELECT * FROM gallery WHERE usrId='$usrid' AND imgBlock=0 ORDER BY imgDate DESC LIMIT $current_limit;";
+    $sql_gallery_img = "SELECT * 
+                        FROM gallery 
+                        WHERE usrId='$usrid' AND imgBlock=0 
+                        ORDER BY imgDate DESC LIMIT $current_limit;";
 
 }
 else {  // parametro non valido
