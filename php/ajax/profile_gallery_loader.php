@@ -80,7 +80,7 @@ $imgArray = array();
 for($i=0; ($entry = mysqli_fetch_assoc($gallery_img_res)); $i++) {
     if($i<$galleryCount) continue;
     $currentImage = new Image();
-    $currentImage->buildImage($entry);
+    $currentImage->buildImage($entry, true);
     array_push($imgArray, $currentImage);
 }
 $result = new AjaxResponse($imgArray, $isOwnGallery, 0, "");

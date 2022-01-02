@@ -119,18 +119,48 @@ function load_profile_gallery() {
             var currentImage;   // conterrà l'immagine corrente
             for(var j=0; j<response.data.length; j++) {
                 currentImage = response.data[j];     // recupero l'array contenente le informazioni relative all'immagine corrente
+
+                var imageFrame = document.createElement("div"); // genero il frame dell'immagine
+                imageFrame.setAttribute("class", "gallery-image-frame");    // imposto la classe cornice immagine
+
                 var imageLink = document.createElement("a"); // genero il wrapper per l'immagine
                 imageLink.setAttribute("href", "./image?id=" + (currentImage.imgName).replace(/\.[^.]+$/, ""));   // imposto il link per la visualizzazione
                 imageLink.setAttribute("class", "gallery-image");    // imposto la classe corretta
-                imageLink.setAttribute("style", "background-image: url(./resources/users/" + currentImage.imgAuthor +
-                                                                                             "/gallery/" + currentImage.imgName);
-                // TODO sostituire con versione cropped
+                imageLink.setAttribute("style", "background-image: url(./resources/users/" + currentImage.imgAuthorId +
+                                                                                             "/gallery/" + currentImage.imgCrop);
 
                 var imageInfo = document.createElement("div");  // genero lo slider contenente le info dell'immagine
                 imageInfo.setAttribute("class", "gallery-image-info");  // imposto la classe corretta
 
-                imageLink.appendChild(imageInfo);    // setto imageInfo come figlio di imageLink
-                currentActiveGallery.appendChild(imageLink);    // inserisco l'immagine nella galleria
+                
+                var imageTitle = document.createElement("p");   // genero il titolo
+                imageTitle.setAttribute("class", "gallery-image-title");    // imposto la classe titolo
+                imageTitle.textContent = currentImage.imgTitle;  // recupero il titolo dall'immagine
+                imageInfo.appendChild(imageTitle);  // appendo il titolo allo slider dell'info
+
+                var imageDesc = document.createElement("p");    // genero la descrizione
+                imageDesc.setAttribute("class", "gallery-image-desc");  // imposto la classe descrizione
+                imageDesc.textContent = currentImage.imgDesc;    // recupero la descrizione dell'immagine
+                imageInfo.appendChild(imageDesc);   // appendo la descrizione allo slider dell'info
+
+                var likeButton = document.createElement("button");     // genero il pulsante
+                likeButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
+                var likeIcon = document.createElement("i");     // genero l'icona
+                likeIcon.setAttribute("class", "bx bx-heart");  // genero imposto la classe dell'icona
+                likeButton.appendChild(likeIcon);   // appendo l'icona al pulsante like
+                imageInfo.appendChild(likeButton);  // appendo il pulsante like allo slider dell'info
+
+                var saveButton = document.createElement("button");     // genero il pulsante
+                saveButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
+                var saveIcon = document.createElement("i");     // genero l'icona
+                saveIcon.setAttribute("class", "bx bx-bookmark");  // genero imposto la classe dell'icona
+                saveButton.appendChild(saveIcon);   // appendo l'icona al pulsante save
+                imageInfo.appendChild(saveButton);  // appendo il pulsante save allo slider dell'info
+
+                imageFrame.appendChild(imageLink);  // setto l'immagine con link come figlia di imageFrame
+                imageFrame.appendChild(imageInfo);  // setto lo slider info come figlio di imageFrame
+                currentActiveGallery.appendChild(imageFrame);    // inserisco l'immagine nella galleria
+                
             }
             
             // se le immagini sono state tutte caricate, setta come completamente caricata

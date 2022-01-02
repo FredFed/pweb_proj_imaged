@@ -25,7 +25,7 @@ if($isOwnProfile !== true) {
     $sql = "SELECT * FROM users WHERE usrName = ? ;";  // comando SQL SELECT
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
     if(!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ./php/page_not_found");   // DB error
+        header("location: ./?err=db_err");   // DB error
     }
     mysqli_stmt_bind_param($stmt, "s", $profileName); // binding tra username e statement
     mysqli_stmt_execute($stmt); // eseguo lo statement
@@ -80,7 +80,7 @@ else if($profileLvl == 2) $badge = "<i class='bx bxs-crown lvl-icon'></i>";  // 
                     <?php include_once './php/elements/profile_gallery.php'; ?>
                 </div>
             </div>
-                    <!-- END MAIN DIV -->
+                    <!-- END MAIN SECTION -->
         </section>
         
         <footer>

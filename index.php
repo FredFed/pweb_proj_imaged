@@ -35,7 +35,7 @@ include_once './php/utils/definitions.php';
 
         <section id="page_main_section">
 
-            <!-- MAIN DIV -->
+            <!-- MAIN SECTION -->
 
             <div class="gallery-frame">
                 <div class="gallery-section">

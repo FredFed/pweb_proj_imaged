@@ -327,7 +327,7 @@ function crop_image($src_path, $dest_path, $file_ext, $max_w, $max_h) {
 }
 
 
-// ritaglia l'immagine secondo la dimensione specificata
+// rende l'altezza e la larghezza dell'immagine uguali (ritagliano ove necessario)
 function square_image($src_path, $dest_path, $file_ext) {
     // controllo se il path dell'immagine è valido
     if(!file_exists($src_path)) return("err=file_no_exist");

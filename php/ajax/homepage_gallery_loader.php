@@ -22,7 +22,10 @@ $galleryIncrement = intval($galleryInfo["increment"]);
 $current_limit = $galleryCount + $galleryIncrement;
 
 
-$sql_gallery_img = "SELECT * FROM gallery WHERE imgHidden=0 AND imgBlock=0 ORDER BY imgDate DESC LIMIT $current_limit;";
+$sql_gallery_img = "SELECT * 
+                    FROM gallery INNER JOIN users ON gallery.usrId = users.usrId 
+                    WHERE imgHidden=0 AND imgBlock=0 
+                    ORDER BY imgDate DESC LIMIT $current_limit;";
 
 // nota: non c'è bisogno di prepared statement, poiché i parametri sono generati dal server stesso
 $gallery_img_res = mysqli_query($conn, $sql_gallery_img);
@@ -39,7 +42,7 @@ for($i=0; ($entry = mysqli_fetch_assoc($gallery_img_res)); $i++) {
     if($i<$galleryCount) continue;
     else {
         $currentImage = new Image();
-        $currentImage->buildImage($entry);
+        $currentImage->buildImage($entry, false);
         array_push($imgArray, $currentImage);
     }
 }

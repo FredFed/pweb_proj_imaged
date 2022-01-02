@@ -20,7 +20,7 @@ if(isset($_POST['submit_prof_img'])) {
     $file_error = $file["error"];
     $file_type = $file["type"];
 
-    // recupero l'estensione
+    // recupero l'estensione (conversione implicita jpg -> jpeg)
     $file_ext = get_ext($file_name);
     if($file_ext == 'jpg') $file_ext = 'jpeg';
 
@@ -68,12 +68,12 @@ if(isset($_POST['submit_prof_img'])) {
     move_uploaded_file($file_tmp_name, $image_path);
 
     // ridimensiono l'immagine per adattarla alla risoluzione pro-pic
-    $temperr=square_image($image_path, $image_path, $file_ext);
+    $temperr=crop_image($image_path, $image_path, $file_ext, $MAX_PIMG_W, $MAX_PIMG_H);
     if($temperr!="success") {   // se il processo non è andato a buon fine...
         unlink($image_path);    // rimuove l'immagine appena salvata
         header("location: ../../profile?user=".$usrname."&".$temperr);    // reindirizza + mostra errore
         exit();
-    } 
+    }
 
     // il file è stato caricato; reindirizzo l'utente
     header("location: ../../profile?user=".$usrname."&up_pimg=success");

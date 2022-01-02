@@ -33,7 +33,7 @@ include_once './php/utils/definitions.php';
 
         <section id="page_main_section">
 
-            <!-- MAIN DIV -->
+            <!-- MAIN SECTION -->
 
             <div class="upload_to_gallery">
                 <form action="./php/utils/upload_gallery_script.php" method="POST" enctype="multipart/form-data">

@@ -20,7 +20,8 @@ class AjaxResponse {
 
 // classe utilizzata per trasferire le immagini alla galleria del client
 class Image {
-    public $imgAuthor;     // autore dell'immagine
+    public $imgAuthorId;     // ID dell'autore dell'immagine
+    public $imgAuthorName;  // nome dell'autore dell'immagine
     public $imgName;   // nome dell'immagine
     public $imgCrop;    // nome immagine cropped
     public $imgTitle;   // titolo dell'immagine
@@ -32,7 +33,8 @@ class Image {
     public $imgDate;    // data di caricamento dell'immagine
 
     function Image() {
-        $this->imgAuthor=null;
+        $this->imgAuthorId=null;
+        $this->imgAuthorName=null;
         $this->imgName=null;
         $this->imgCrop=null;
         $this->imgTitle=null;
@@ -45,12 +47,18 @@ class Image {
         return;
     }
 
-    function buildImage($imgResult) {
+    function buildImage($imgResult, $isProfileGallery) {
         // build an Image object from the DB result given
-        if($imgResult["usrId"] == null) $this->imgAuthor = "default";
-        else $this->imgAuthor = $imgResult["usrId"];
+
+        if(!$isProfileGallery && $imgResult["usrId"] != null) {
+            $this->imgAuthorName = $imgResult["usrName"];
+        }
+        else {
+            $this->imgAuthorName = null;
+        }
+        $this->imgAuthorId = $imgResult["usrId"];
         $this->imgName = $imgResult["imgName"];
-        $this->imgCrop = drop_ext($this->imgName)."_crop.".get_ext($this->imgName);
+        $this->imgCrop = (drop_ext($this->imgName))."cropped.".(get_ext($this->imgName));
         $this->imgTitle = $imgResult["imgTitle"];
         $this->imgDesc = $imgResult["imgDesc"];
         $this->imgTags = $imgResult["imgTags"];

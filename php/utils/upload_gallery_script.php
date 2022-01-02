@@ -18,8 +18,9 @@ if(isset($_POST["submit_img_gallery"])) {
     $img_size = $img['size'];
     $img_error = $img['error'];
 
-    // recupero l'estensione
+    // recupero l'estensione (conversione implicita jpg -> jpeg)
     $img_ext = get_ext($img_name);
+    if($img_ext == 'jpg') $img_ext = 'jpeg';
 
     
     // ########## GESTIONE ERRORI ##########
@@ -45,7 +46,8 @@ if(isset($_POST["submit_img_gallery"])) {
     // ########## SALVATAGGIO E AGGIUNTA ENTRY AL DB #########
 
     // genero una stringa unica casuale e appendo l'estensione per creare il nome del file
-    $img_final_name = generate_key($conn).'.'.$img_ext;
+    $img_name_no_ext = generate_key($conn);
+    $img_final_name = $img_name_no_ext.'.'.$img_ext;
 
     // stabilisco se l'utente è loggato o meno
     if(isset($_SESSION["usrid"])) {
@@ -55,8 +57,9 @@ if(isset($_POST["submit_img_gallery"])) {
     else $usrid = NULL;
 
     // ricavo il path finale dell'immagine
-    if($usrid==NULL) $img_path = "../../resources/users/default/".$img_final_name;
-    else $img_path = "../../resources/users/".$usrid."/gallery/".$img_final_name;
+    if($usrid==NULL) $img_pre_path = "../../resources/users/default/";
+    else $img_pre_path = "../../resources/users/".$usrid."/gallery/";
+    $img_path = $img_pre_path.$img_final_name;
 
     // aggiorno il database con l'entry relativa all'immagine
     if(!upload_gallery_img($conn, $usrid, $img_final_name, $img_title, $img_desc, $img_tags, $img_ls, $img_hddn)) {
@@ -66,6 +69,14 @@ if(isset($_POST["submit_img_gallery"])) {
 
     // salvo il file all'interno del percorso
     move_uploaded_file($img_tmp_name, $img_path);
+
+    // genero versione cropped da usare per le anteprime in galleria
+    $temperr=crop_image($img_path, $img_pre_path.$img_name_no_ext."cropped".'.'.$img_ext, $img_ext, $MAX_GIMG_W, $MAX_GIMG_H);
+    if($temperr!="success") {   // se il processo non è andato a buon fine...
+        unlink($image_path);    // rimuove l'immagine appena salvata
+        header("location: ../../profile?user=".$usrname."&".$temperr);    // reindirizza + mostra errore
+        exit();
+    } 
 
     // ritorno alla galleria dell'utente (se l'utente è loggato) o alla homepage
     if($usrid) header("location: ../../profile?user=".$usrname."&up_img=success");
