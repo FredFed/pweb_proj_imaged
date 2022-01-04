@@ -28,7 +28,7 @@ $imageId = $imageInfo["imageId"];
 $imageAction = $imageInfo["imageAction"];
 
 if($imageAction == "save") {
-    $sql = "INSERT INTO saved (usrId, imgId, likeDate) VALUES ('$usrid', ?, now());";
+    $sql = "INSERT INTO saved (usrId, imgId, saveDate) VALUES ('$usrid', ?, now());";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
     if(!mysqli_stmt_prepare($stmt, $sql)) {    // errore DB
@@ -41,7 +41,6 @@ if($imageAction == "save") {
     mysqli_stmt_close($stmt);   // chiudo lo statement
 }
 else if($imageAction == "unsave") {
-    sleep(3);
     $sql = "DELETE FROM saved WHERE usrId='$usrid' AND imgId=?;";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB

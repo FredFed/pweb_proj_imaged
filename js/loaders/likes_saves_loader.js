@@ -8,10 +8,10 @@
     imageUtils.like = function() {
         const likeButton = document.getElementById(this.id);   // creo un riferimento al like button
         var imageInfo = {};     // creo l'oggetto da passare alla richiesta Ajax
-        imageInfo.imageId = likeButton.id;    // recupero l'ID dell'immagine dal pulsante like
+        imageInfo.imageId = (likeButton.id).replace("like_", "");    // recupero l'ID dell'immagine dal pulsante like
 
         if((likeButton.classList.contains("liked")) == true) {  // se l'utente ha un like sull'immagine, unlike
-            console.log("liked");   // TODO remove
+            console.log("unliking");   // TODO remove
             imageInfo.imageAction = "unlike";     // imposto l'operazione da eseguire
             ajaxUtils.ajaxSendRequest("./php/ajax/likes_manager.php", function(response) {
 
@@ -32,7 +32,7 @@
             }, JSON.stringify(imageInfo));
         }
         else {  // se l'utente non ha un like sull'immagine, like
-            console.log("unliked");     // TODO remove
+            console.log("liking");     // TODO remove
             imageInfo.imageAction = "like";   // imposto l'operazione da eseguire
             ajaxUtils.ajaxSendRequest("./php/ajax/likes_manager.php", function(response) {
 
@@ -53,12 +53,12 @@
     imageUtils.save = function() {
         const saveButton = document.getElementById(this.id);   // creo un riferimento al save button
         var imageInfo = {};     // creo l'oggetto da passare alla richiesta Ajax
-        imageInfo.imageId = saveButton.id;    // recupero l'ID dell'immagine dal pulsante save
+        imageInfo.imageId = (saveButton.id).replace("save_", "");    // recupero l'ID dell'immagine dal pulsante save
 
         if((saveButton.classList.contains("saved")) == true) {  // se l'utente ha un save sull'immagine, unsave
             imageInfo.imageAction = "unsave";     // imposto l'operazione da eseguire
             ajaxUtils.ajaxSendRequest("./php/ajax/saves_manager.php", function(response) {
-
+                console.log("unsaving");  // TODO remove
                 if(response.errorCode != 0) return null; // errore fatale
 
                 saveButton.classList.remove("saved");   // rimuovo il mark del save
@@ -72,7 +72,7 @@
         else {  // se l'utente non ha un save sull'immagine, save
             imageInfo.imageAction = "save";   // imposto l'operazione da eseguire
             ajaxUtils.ajaxSendRequest("./php/ajax/saves_manager.php", function(response) {
-
+                console.log("saving");  // TODO remove
                 if(response.errorCode != 0) return null; // errore fatale
 
                 saveButton.classList.add("saved");  // aggiungo il mark del save

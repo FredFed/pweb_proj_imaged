@@ -161,7 +161,7 @@ function load_profile_gallery() {
                     var likeIcon = document.createElement("i");     // genero l'icona
                     likeIcon.setAttribute("class", "bx bx-heart");  // genero imposto la classe dell'icona
                 }
-                likeButton.setAttribute("id", currentImage.imgId);  // imposto l'ID del pulsante like al valore dell'ID dell'immagine
+                likeButton.setAttribute("id", "like_"+currentImage.imgId);  // imposto l'ID del pulsante like al valore dell'ID dell'immagine
                 likeButton.addEventListener("click", imageUtils.like);      // aggiungo il listener per l'evento like/unlike su click
                 likeButton.appendChild(likeIcon);   // appendo l'icona al pulsante like
                 imageInfo.appendChild(likeButton);  // appendo il pulsante like allo slider dell'info
@@ -178,7 +178,7 @@ function load_profile_gallery() {
                         var saveIcon = document.createElement("i");     // genero l'icona
                         saveIcon.setAttribute("class", "bx bx-bookmark");  // genero imposto la classe dell'icona
                     }
-                    saveButton.setAttribute("id", currentImage.imgId);  // imposto l'ID del pulsante save al valore dell'ID dell'immagine
+                    saveButton.setAttribute("id", "save_"+currentImage.imgId);  // imposto l'ID del pulsante save al valore dell'ID dell'immagine
                     saveButton.addEventListener("click", imageUtils.save);      // aggiungo il listener per l'evento save/unsave su click
                     saveButton.appendChild(saveIcon);   // appendo l'icona al pulsante save
                     imageInfo.appendChild(saveButton);  // appendo il pulsante save allo slider dell'info
