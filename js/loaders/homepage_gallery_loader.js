@@ -13,7 +13,7 @@ function load_homepage_gallery() {
     // creazione dell'intersection observer
     let options = {
         root: null,
-        rootMargin: '200px',
+        rootMargin: '0px',
         threshold: 1
     }
     const galleryObs = new IntersectionObserver(intersectHandler, options);
@@ -55,7 +55,7 @@ function load_homepage_gallery() {
 
                     return emptyElement;
                 }
-                else return;    // errore fatale
+                else return null;    // errore fatale
             }
 
             var currentImage;   // conterrà l'immagine corrente
@@ -66,7 +66,8 @@ function load_homepage_gallery() {
                 imageFrame.setAttribute("class", "gallery-image-frame");    // imposto la classe cornice immagine
 
                 var imageLink = document.createElement("a"); // genero il wrapper per l'immagine
-                imageLink.setAttribute("href", "./image?id=" + (currentImage.imgName).replace(/\.[^.]+$/, ""));   // imposto il link per la visualizzazione
+                // imposto il link per la visualizzazione dell'immagine
+                imageLink.setAttribute("href", "./image?id=" + (currentImage.imgName).replace(/\.[^.]+$/, ""));
                 imageLink.setAttribute("class", "gallery-image");    // imposto la classe corretta
                 imageLink.setAttribute("style", "background-image: url(./resources/users/" + currentImage.imgAuthorId +
                                                                                              "/gallery/" + currentImage.imgName);
@@ -75,7 +76,13 @@ function load_homepage_gallery() {
                 var imageInfo = document.createElement("div");  // genero lo slider contenente le info dell'immagine
                 imageInfo.setAttribute("class", "gallery-image-info");  // imposto la classe corretta
 
-                var imageTitle = document.createElement("p");   // genero il titolo
+                var imageGrip = document.createElement("div");    // genero il grip che mostra lo slider info
+                imageGrip.setAttribute("class", "gallery-image-grip");  // imposto la classe corretta
+                imageInfo.appendChild(imageGrip);   // appendo il grip allo slider dell'info
+
+                var imageTitle = document.createElement("a");   // genero il titolo
+                // imposto il link per l'immagine
+                imageTitle.setAttribute("href", "./image?id=" + (currentImage.imgName).replace(/\.[^.]+$/, ""));
                 imageTitle.setAttribute("class", "gallery-image-title");    // imposto la classe titolo
                 imageTitle.textContent = currentImage.imgTitle;  // recupero il titolo dall'immagine
                 imageInfo.appendChild(imageTitle);  // appendo il titolo allo slider dell'info
@@ -88,27 +95,45 @@ function load_homepage_gallery() {
                 var imageAuth = document.createElement("a");    // genero l'autore con link per il suo profilo
                 imageAuth.setAttribute("class", "gallery-image-auth");  // imposto la classe autore
                 imageAuth.setAttribute("href", "./profile?user=" + currentImage.imgAuthorName); // imposto il link per il profilo
-                imageAuth.textContent = "Posted by: " + currentImage.imgAuthorName;  // recupero l'autore dell'immagine
+                imageAuth.textContent = "Author: " + currentImage.imgAuthorName;  // recupero l'autore dell'immagine
                 imageInfo.appendChild(imageAuth);   // appendo la descrizione allo slider dell'info
 
-                // richiesta Ajax GET che comunica l'id immagine e restituisce informazioni su like/save
-                ajaxUtils.ajaxSendRequest("./php/ajax/image_data_getter.php?id=" + currentImage.imgId, function(response) {
-                    // TODO elaborare
-                });
-
-                var likeButton = document.createElement("button");     // genero il pulsante
-                likeButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
-                var likeIcon = document.createElement("i");     // genero l'icona
-                likeIcon.setAttribute("class", "bx bx-heart");  // genero imposto la classe dell'icona
+                var likeButton = document.createElement("button");     // genero il pulsante like
+                if(currentImage.isLiked) {  // se l'utente ha un like sull'immagine...
+                    likeButton.setAttribute("class", "gallery-image-buttons liked");  // imposto la classe pulsante immagine
+                    var likeIcon = document.createElement("i");     // genero l'icona
+                    likeIcon.setAttribute("class", "bx bxs-heart");  // genero imposto la classe dell'icona
+                }
+                else {  // se l'utente non ha un like sull'immagine...
+                    console.log("image unliked"); // TODO remove
+                    likeButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
+                    var likeIcon = document.createElement("i");     // genero l'icona
+                    likeIcon.setAttribute("class", "bx bx-heart");  // genero imposto la classe dell'icona
+                }
+                likeButton.setAttribute("id", currentImage.imgId);  // imposto l'ID del pulsante like al valore dell'ID dell'immagine
+                likeButton.addEventListener("click", imageUtils.like);      // aggiungo il listener per l'evento like/unlike su click
                 likeButton.appendChild(likeIcon);   // appendo l'icona al pulsante like
                 imageInfo.appendChild(likeButton);  // appendo il pulsante like allo slider dell'info
 
-                var saveButton = document.createElement("button");     // genero il pulsante
-                saveButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
-                var saveIcon = document.createElement("i");     // genero l'icona
-                saveIcon.setAttribute("class", "bx bx-bookmark");  // genero imposto la classe dell'icona
-                saveButton.appendChild(saveIcon);   // appendo l'icona al pulsante save
-                imageInfo.appendChild(saveButton);  // appendo il pulsante save allo slider dell'info
+
+                if(!currentImage.isOwnImage) {  // se l'utente non è il proprietario dell'immagine, visualizza il pulsante save
+                    var saveButton = document.createElement("button");     // genero il pulsante save
+                    if(currentImage.isSaved) {  // se l'utente ha salvato l'immagine...
+                        saveButton.setAttribute("class", "gallery-image-buttons saved");  // imposto la classe pulsante immagine
+                        var saveIcon = document.createElement("i");     // genero l'icona
+                        saveIcon.setAttribute("class", "bx bxs-bookmark");  // genero imposto la classe dell'icona
+                    }
+                    else {  // se l'utente non ha salvato l'immagine...
+                        saveButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
+                        var saveIcon = document.createElement("i");     // genero l'icona
+                        saveIcon.setAttribute("class", "bx bx-bookmark");  // genero imposto la classe dell'icona
+                    }
+                    saveButton.setAttribute("id", currentImage.imgId);  // imposto l'ID del pulsante save al valore dell'ID dell'immagine
+                    saveButton.addEventListener("click", imageUtils.save);      // aggiungo il listener per l'evento save/unsave su click
+                    saveButton.appendChild(saveIcon);   // appendo l'icona al pulsante save
+                    imageInfo.appendChild(saveButton);  // appendo il pulsante save allo slider dell'info
+                }
+                
 
                 imageFrame.appendChild(imageLink);  // setto l'immagine con link come figlia di imageFrame
                 imageFrame.appendChild(imageInfo);  // setto lo slider info come figlio di imageFrame

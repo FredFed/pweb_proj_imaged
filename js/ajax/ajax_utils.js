@@ -26,7 +26,7 @@
         var ajaxRequest = getRequestObject();   // recupero un request object
         // assegno la gestione della risposta ad un handler specializzato (quando questa sarà "ready")
         ajaxRequest.onreadystatechange = function() { handleServerResponse(ajaxRequest, responseHandler, isJsonGet); };
-        ajaxRequest.open(requestMethod, requestUrl, true);  // effettuo la richiesta GET per l'url in modo asincrono
+        ajaxRequest.open(requestMethod, requestUrl, true);  // effettuo la richiesta per l'url in modo asincrono
 
         if(requestMethod === "POST") {  // se la richiesta è di tipo POST...
             if((isJsonPost == true) || (isJsonPost == undefined))   // se non specificato diversamente, il dato è JSON

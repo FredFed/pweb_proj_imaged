@@ -85,6 +85,7 @@ if(mysqli_num_rows($gallery_img_res) == 0) {   // galleria vuota
     echo json_encode($result);
     exit();
 }
+mysqli_stmt_close($stmt);
 
 // recupero i risultati della query
 $imgArray = array();
@@ -92,6 +93,45 @@ for($i=0; ($entry = mysqli_fetch_assoc($gallery_img_res)); $i++) {
     if($i<$galleryCount) continue;
     $currentImage = new Image();
     $currentImage->buildImage($entry, true);
+
+    $isOwnImage=false;  // valore default (verrà cambiato se l'utente è l'autore dell'immagine)
+    $likeCount=0;       // valore default (verrà cambiato in base ai likes dell'immagine)
+    $isLiked=false;     // valore default (verrà cambiato se l'utente ha messo like all'immagine)
+    $isSaved=false;     // valore default (verrà cambiato se l'utente ha salvato l'immagine)
+
+    $imgid = $entry["imgId"];   // recupero l'ID dell'immagine corrente
+    // se l'utente è loggato, controlla se è il proprietario dell'immagine, se ha like e se l'ha salvata
+    if(isset($_SESSION["usrid"])) {
+        $curr_user = $_SESSION["usrid"];
+        if($curr_user == $entry["usrId"]) $isOwnImage=true;
+
+        // Query che controlla se l'utente ha un like sull'immagine corrente
+        $sql = "SELECT * 
+                FROM likes
+                WHERE usrId='$curr_user' AND imgId='$imgid';";
+        $img_info_res = mysqli_query($conn, $sql);  // no stmt (param generati dal server)
+        if(mysqli_num_rows($img_info_res) != 0) $isLiked=true;
+
+        // Query che controlla se l'utente ha salvato l'immagine corrente
+        $sql = "SELECT * 
+                FROM saved 
+                WHERE usrId='$curr_user' AND imgId='$imgid';";
+        $img_info_res = mysqli_query($conn, $sql);  // no stmt (param generati dal server)
+        if(mysqli_num_rows($img_info_res) != 0) $isSaved=true;
+    }
+
+    // Query che controlla il numero di likes dell'immagine corrente
+    $sql = "SELECT count(*) as likeNum 
+            FROM likes 
+            WHERE imgId='$imgid';";
+    $img_info_res = mysqli_query($conn, $sql);  // no stmt (param generati dal server)
+    if(mysqli_num_rows($img_info_res) != 0) {
+        $img_info = mysqli_fetch_assoc($img_info_res);
+        $likeCount = $img_info["likeNum"];
+    }
+    // aggiorno le informazioni sull'immagine corrente
+    $currentImage->fillImageData($isOwnImage, $likeCount, $isLiked, $isSaved);
+
     array_push($imgArray, $currentImage);
 }
 $result = new AjaxResponse($imgArray, $isOwnGallery, 0, "");

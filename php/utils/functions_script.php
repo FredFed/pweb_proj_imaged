@@ -421,6 +421,8 @@ function posts_number($conn, $usrid) {
     $usr_row = mysqli_fetch_assoc($query_res);
     if(!$usr_row) return -1;
 
+    mysqli_stmt_close($stmt);
+
     return($usr_row["imgNum"]);
 }
 
@@ -450,6 +452,8 @@ function upvotes_number($conn, $usrid) {
     if(!$query_res) return -1;
     $usr_row = mysqli_fetch_assoc($query_res);
     if(!$usr_row) return -1;
+
+    mysqli_stmt_close($stmt);
 
     return($usr_row["imgNum"]);
 }

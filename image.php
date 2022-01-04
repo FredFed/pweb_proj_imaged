@@ -17,6 +17,7 @@ if(!mysqli_stmt_prepare($stmt, $sql)) {
 mysqli_stmt_bind_param($stmt, "s", $imgKey); // binding tra chiave immagine e statement
 mysqli_stmt_execute($stmt);     // eseguo lo statement
 $image_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));    // recupero i risultati della query
+mysqli_stmt_close($stmt);
 if(!$image_data) header("location: ./php/page_not_found");  // l'immagine non esiste
 else {
     $imgAuthor = $image_data["usrId"];

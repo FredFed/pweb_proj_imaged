@@ -32,11 +32,11 @@ if(isset($_SESSION["usrid"])) {
 if($usrid != null) {    // se l'utente è loggato, controlla se ha un like sull'immagine e/o l'ha salvata
     // comando SQL SELECT per osservare se l'utente ha già un like sull'immagine
     $sql = "SELECT * 
-            FROM liked
-            WHERE usrId='$usrid' AND imgId=?;";
+            FROM likes
+            WHERE usrId='$usrid' AND imgId = ? ;";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
     if(!mysqli_stmt_prepare($stmt, $sql)) {
-        $result = new AjaxResponse(null, false, -1, "server error: retrieving user like");
+        $result = new AjaxResponse(null, null, -1, "server error: retrieving user like");
         echo json_encode($result);
         exit();
     }
@@ -44,6 +44,7 @@ if($usrid != null) {    // se l'utente è loggato, controlla se ha un like sull'
     mysqli_stmt_execute($stmt); // eseguo lo statement
     $image_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt)); // recupero risultati query
     if($image_data) $isLiked=true;
+    mysqli_stmt_close($stmt);
 
     // comando SQL SELECT per osservare se l'utente ha già salvato l'immagine
     $sql = "SELECT * 
@@ -51,7 +52,7 @@ if($usrid != null) {    // se l'utente è loggato, controlla se ha un like sull'
             WHERE usrId='$usrid' AND imgId=?;";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
     if(!mysqli_stmt_prepare($stmt, $sql)) {
-        $result = new AjaxResponse(null, false, -1, "server error: retrieving user save");
+        $result = new AjaxResponse(null, null, -1, "server error: retrieving user save");
         echo json_encode($result);
         exit();
     }
@@ -59,6 +60,7 @@ if($usrid != null) {    // se l'utente è loggato, controlla se ha un like sull'
     mysqli_stmt_execute($stmt); // eseguo lo statement
     $image_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt)); // recupero risultati query
     if($image_data) $isSaved=true;
+    mysqli_stmt_close($stmt);
 
     // comando SQL SELECT per osservare se l'utente loggato è il proprietario dell'immagine
     $sql = "SELECT * 
@@ -66,7 +68,7 @@ if($usrid != null) {    // se l'utente è loggato, controlla se ha un like sull'
             WHERE usrId='$usrid' AND imgId=?;";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
     if(!mysqli_stmt_prepare($stmt, $sql)) {
-        $result = new AjaxResponse(null, false, -1, "server error: retrieving image author");
+        $result = new AjaxResponse(null, null, -1, "server error: retrieving image author");
         echo json_encode($result);
         exit();
     }
@@ -74,15 +76,16 @@ if($usrid != null) {    // se l'utente è loggato, controlla se ha un like sull'
     mysqli_stmt_execute($stmt); // eseguo lo statement
     $image_author = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt)); // recupero risultati query
     if($image_author) $isOwnImage=true; // se ho un risultato, l'utente è il proprietario dell'immagine
+    mysqli_stmt_close($stmt);
 }
 
 // comando SQL SELECT per recuperare il numero di likes dell'immagine
 $sql = "SELECT count(*) as likeNum 
-FROM liked
+FROM likes
 WHERE imgId=?;";
 $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
 if(!mysqli_stmt_prepare($stmt, $sql)) {
-$result = new AjaxResponse(null, false, -1, "server error: retrieving like number");
+$result = new AjaxResponse(null, null, -1, "server error: retrieving like number");
 echo json_encode($result);
 exit();
 }
@@ -90,11 +93,12 @@ mysqli_stmt_bind_param($stmt, "s", $imgid); // binding tra imgid e statement
 mysqli_stmt_execute($stmt); // eseguo lo statement
 $image_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt)); // recupero risultati query
 if(!$image_data) {
-    $result = new AjaxResponse(null, false, -1, "server error: retrieving like number");
+    $result = new AjaxResponse(null, null, -1, "server error: retrieving like number");
     echo json_encode($result);
     exit();
 }
 $likeCount = $image_data["likeNum"];
+mysqli_stmt_close($stmt);
 
 // restituisco i risultati
 $image_data = new ImageInteraction();

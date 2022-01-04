@@ -751,11 +751,23 @@ nav {
     top: 25%;
 }
 
+.gallery-image-grip {
+    background-color: var(--grey);
+    position: absolute;
+    left: 43%;
+    width: 14%;
+    justify-self: center;
+    margin: 5% 0 5% 0;
+    border: 1.5px solid var(--grey);
+    border-radius: 5px;
+}
+
 .gallery-image-title {
     font-size: 1.2em;
     flex-basis: 100%;
     text-decoration: none;
     color: #EEEEEE;
+    padding-top: 10%;
     margin: 2%;
 }
 

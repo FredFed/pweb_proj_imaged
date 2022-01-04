@@ -33,6 +33,11 @@ class Image {
     public $imgHidden;  // flag immagine nascosta
     public $imgDate;    // data di caricamento dell'immagine
 
+    public $isOwnImage; // indica se l'immagine è dell'utente (loggato)
+    public $likeCount;   //contatore dei likes correnti
+    public $isLiked;    // indica se l'immagine ha già un like dall'utente
+    public $isSaved;    // indica se l'immagine è già salvata dall'utente
+
     function Image() {
         $this->imgAuthorId=null;
         $this->imgAuthorName=null;
@@ -46,6 +51,11 @@ class Image {
         $this->imgBlock=null;
         $this->imgHidden=null;
         $this->imgDate=null;
+
+        $this->isOwnImage=null;
+        $this->likeCount=null;
+        $this->isLiked=null;
+        $this->isSaved=null;
         return;
     }
 
@@ -70,6 +80,13 @@ class Image {
         $this->imgHidden = $imgResult["imgHidden"];
         $this->imgDate = $imgResult["imgDate"];
         return;
+    }
+
+    function fillImageData($isOwnImage, $likeCount, $isLiked, $isSaved) {
+        $this->isOwnImage = $isOwnImage;
+        $this->likeCount = $likeCount;
+        $this->isLiked = $isLiked;
+        $this->isSaved = $isSaved;
     }
 }
 

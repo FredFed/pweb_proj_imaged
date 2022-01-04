@@ -30,6 +30,7 @@ if($isOwnProfile !== true) {
     mysqli_stmt_bind_param($stmt, "s", $profileName); // binding tra username e statement
     mysqli_stmt_execute($stmt); // eseguo lo statement
     $user_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt)); // recupero risultati query
+    mysqli_stmt_close($stmt);
     if(!$user_data) header("location: ./php/page_not_found");   // l'utente non esiste
     else {
         $profileId = $user_data["usrId"];
@@ -56,10 +57,11 @@ else if($profileLvl == 2) $badge = "<i class='bx bxs-crown lvl-icon'></i>";  // 
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <script src="./js/ajax/ajax_utils.js"></script>
+        <script src="./js/loaders/likes_saves_loader.js"></script>
+        <script src="./js/loaders/profile_gallery_loader.js"></script>
         <?php if($isOwnProfile === true) echo "<script src='./js/prof_img_button_handler.js'></script>"; ?>
         <script src="./js/searchbox_clear.js"></script>
         <script src="./js/navbar_scroll.js"></script>
-        <script src="./js/loaders/profile_gallery_loader.js"></script>
         <title>Imaged</title>
     </head>
     <body>
