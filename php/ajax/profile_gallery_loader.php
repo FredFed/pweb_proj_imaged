@@ -60,7 +60,7 @@ else if($galleryType == "private-gallery") {   // immagini per la galleria priva
 }
 else if($galleryType == "saved-gallery") {     // immagini per gli elementi salvati
     $sql_gallery_img = "SELECT * 
-                        FROM gallery INNER JOIN saved ON gallery.imgId=saved.imgId 
+                        FROM saved INNER JOIN gallery ON gallery.imgId=saved.imgId 
                         WHERE saved.usrId='$usrid' AND gallery.imgHidden=0 AND gallery.imgBlock=0 
                         ORDER BY saved.saveDate DESC LIMIT $current_limit;";
 }
