@@ -157,8 +157,13 @@ if(mysqli_num_rows($img_info_res) != 0) {
                             <p class="image-desc">&nbsp;-&nbsp;</p>
                             <p class="image-desc"><?php echo $imgDesc; ?>
                             <?php
-                                $tags="";
-                                if(!empty($imgTags)) $tags = preg_replace("/\s/", " #", ' '.$imgTags);
+                                $tags=$imgTags;
+                                if(!empty($tags)) {
+                                    $tags = preg_replace("/[#$%^&*()+=\-\[\]\';,.\/{}|\":<>?~\\\\]/", ' ', $tags);
+                                    $tags = preg_replace("/\s{2,}/", ' ', $tags);
+                                    if($tags[0]!=' ') $tags = ' '.$tags;
+                                    $tags = preg_replace("/\s/", " #", $tags);
+                                }
                             ?>
                             <p class="image-tags">Tags: <?php echo $tags; ?></p>
                         </div>
