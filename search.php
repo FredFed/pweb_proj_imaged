@@ -40,7 +40,7 @@ require_once './php/utils/definitions.php';
 
             <!-- MAIN SECTION -->
             <div class="search-section">
-                <h1 class="search-banner">Search results:</h1>
+                <h1 class="search-banner">Search results for "<?php echo $_GET["search"] ?>":</h1>
                 <div class="search-delimiter"></div>
                 <div class="search-results">
 
