@@ -1291,31 +1291,6 @@ nav {
 }
 
 
-/* ########## HELP PAGE ########## */
-
-.help-section {
-    background-color: var(--dark-bg-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    vertical-align: middle;
-    color: #DDDDDD;
-    justify-self: center;
-    align-self: center;
-    margin: 5% 15%;
-    padding: 2% 5% 5%;
-    border-radius: 20px;
-}
-
-.help-delimiter {
-    background-color: var(--light-bg-color);
-    height: 1px;
-    width: 90%;
-    margin: 2% 0;
-}
-
-
 /* ########## LOGIN/SIGNUP PAGE ########## */
 
 .section-login-signup {

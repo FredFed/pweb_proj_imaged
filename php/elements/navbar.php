@@ -27,8 +27,6 @@
             </form>
         </div>
 
-        <a class="signature-button button" href="./help">Info</a>
-
         <?php
             echo '
             <div class="upload-image-button-frame">
@@ -100,7 +98,6 @@
                 <ul class="user-menu">
                     <li class="user-menu-item"><a href="./profile?user='.$_SESSION["usrname"].'&gallery=public"><i class="bx bxs-user user-menu-icon"></i>Profile</a></li>
                     <li class="user-menu-item"><a href="./profile?user='.$_SESSION["usrname"].'&gallery=saved"><i class="bx bxs-save user-menu-icon" ></i>Saved</a></li>
-                    <li class="user-menu-item"><a href="./help"><i class="bx bxs-help-circle user-menu-icon"></i>Help</a></li>
                     <li class="user-menu-item user-logout-item"><a href="./php/utils/logout_script.php"><i class="bx bx-log-out-circle user-menu-icon"></i>LogOut</a></li>
                 </ul>
             </div>';
