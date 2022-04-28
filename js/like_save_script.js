@@ -8,6 +8,7 @@ function like_save_script() {
     likeButton.parentElement.removeChild(nodeToRemove);
 
     likeButton.addEventListener("click", () => {
+        likeButton.disabled = true;
         var imageInfo = {};     // creo l'oggetto da passare alla richiesta Ajax
         imageInfo.imageId = (likeButton.id).replace("like_", "");    // recupero l'ID dell'immagine dal pulsante like
 
@@ -29,6 +30,7 @@ function like_save_script() {
                 likeButton.childNodes[0].classList.add("bx-heart");   // aggiungo l'icona che indica il mancato like
                 // aggiorno il contatore dei likes
                 (likeButton.nextSibling).textContent = response.data;
+                likeButton.disabled = false;
 
                 return likeButton;
 
@@ -52,6 +54,7 @@ function like_save_script() {
                 likeButton.childNodes[0].classList.add("bxs-heart");  // aggiungo l'icona che indica il like
                 // aggiorno il contatore dei likes
                 (likeButton.nextSibling).textContent = response.data;
+                likeButton.disabled = false;
 
                 return likeButton;
 
@@ -59,6 +62,7 @@ function like_save_script() {
         }
     });
     saveButton.addEventListener("click", () => {
+        saveButton.disabled = true;
         var imageInfo = {};     // creo l'oggetto da passare alla richiesta Ajax
         imageInfo.imageId = (saveButton.id).replace("save_", "");    // recupero l'ID dell'immagine dal pulsante save
 
@@ -78,6 +82,7 @@ function like_save_script() {
                 saveButton.classList.remove("saved");   // rimuovo il mark del save
                 saveButton.childNodes[0].classList.remove("bxs-bookmark");   // rimuovo l'icona che indica il save
                 saveButton.childNodes[0].classList.add("bx-bookmark");   // aggiungo l'icona che indica il mancato save
+                saveButton.disabled = false;
 
                 return saveButton;
 
@@ -99,6 +104,7 @@ function like_save_script() {
                 saveButton.classList.add("saved");  // aggiungo il mark del save
                 saveButton.childNodes[0].classList.remove("bx-bookmark");    // rimuovo l'icona che indica il mancato save
                 saveButton.childNodes[0].classList.add("bxs-bookmark");  // aggiungo l'icona che indica il save
+                saveButton.disabled = false;
 
                 return saveButton;
 
