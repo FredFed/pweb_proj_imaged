@@ -1,9 +1,11 @@
 // Gestisce il caricamento della galleria pubblica, privata e degli elementi salvati via AJAX
 
+// TODO fare in modo che le foto siano caricate su schermi di ogni res, ciclando all'inizio finché sub-margin è invisibile
+
 
 
 function load_profile_gallery() {
-    load_profile_gallery.postsIncrement = 12;
+    load_profile_gallery.postsIncrement = 1000;
     load_profile_gallery.postsCount = [0, 0, 0];
     load_profile_gallery.isGallerySet = [false, false, false];
     load_profile_gallery.isGalleryLoaded = [false, false, false];
@@ -15,11 +17,12 @@ function load_profile_gallery() {
     var currentActiveGallery;     // conterrà il riferimento alla galleria correntemente attiva
 
 
-
-    // Imposta la galleria profilo pubblica come predefinita da mostrare
-    galleries.forEach(function(el) {el.classList.add("hidden"); loadImages(el)});
+    // Carica le prime immagini
+    galleries.forEach(function(el) {/*el.classList.add("hidden");*/ loadImages(el)});
+    /*
     gallerySelectors[0].classList.add("gallery-selected");
     galleries[0].classList.remove("hidden");
+    */
 
     // aggiungo event listeners ad ogni selettore per mostrare soltanto la galleria selezionata
     for(var i=0; i<gallerySelectors.length; i++) {
@@ -75,9 +78,6 @@ function load_profile_gallery() {
         galleryInfo.count = load_profile_gallery.postsCount[currentGalleryIndex];
         galleryInfo.increment = load_profile_gallery.postsIncrement;
 
-        // aggiorno il numero di post richiesti finora
-        load_profile_gallery.postsCount[currentGalleryIndex] += load_profile_gallery.postsIncrement;
-
         // richiesta Ajax POST che comunica la galleria attuale e recupera le immagini
         ajaxUtils.ajaxSendRequest("./php/ajax/profile_gallery_loader.php", function(response) {
 
@@ -116,6 +116,9 @@ function load_profile_gallery() {
                 else return null;    // errore fatale
             }
 
+            // aggiorno il numero di post richiesti finora
+            load_profile_gallery.postsCount[currentGalleryIndex] += load_profile_gallery.postsIncrement;
+
             var currentImage;   // conterrà l'immagine corrente
             for(var j=0; j<response.data.length; j++) {
                 currentImage = response.data[j];     // recupero l'array contenente le informazioni relative all'immagine corrente
@@ -138,6 +141,7 @@ function load_profile_gallery() {
                 imageInfo.appendChild(imageGrip);   // appendo il grip allo slider dell'info
                 
                 var imageTitle = document.createElement("a");   // genero il titolo
+                imageTitle.setAttribute("id", currentImage.imgId);  // salvo l'id immagine nel titolo
                 // imposto il link per l'immagine
                 imageTitle.setAttribute("href", "./image?id=" + (currentImage.imgName).replace(/\.[^.]+$/, ""));
                 imageTitle.setAttribute("class", "gallery-image-title");    // imposto la classe titolo
@@ -165,24 +169,27 @@ function load_profile_gallery() {
                 likeButton.addEventListener("click", imageUtils.like);      // aggiungo il listener per l'evento like/unlike su click
                 likeButton.appendChild(likeIcon);   // appendo l'icona al pulsante like
                 imageInfo.appendChild(likeButton);  // appendo il pulsante like allo slider dell'info
+                var likeCount = document.createElement("p");  // genero il contatore dei like
+                likeCount.setAttribute("class", "gallery-image-counter");   // imposto la classe contatore like
+                likeCount.textContent = currentImage.likeCount;     // recupero il numero esatto dei likes
+                imageInfo.appendChild(likeCount);   // appendo il contatore like allo slider dell'info
 
-                if(!currentImage.isOwnImage) {  // se l'utente non è il proprietario dell'immagine, visualizza il pulsante save
-                    var saveButton = document.createElement("button");     // genero il pulsante save
-                    if(currentImage.isSaved) {
-                        saveButton.setAttribute("class", "gallery-image-buttons saved");  // imposto la classe pulsante immagine
-                        var saveIcon = document.createElement("i");     // genero l'icona
-                        saveIcon.setAttribute("class", "bx bxs-bookmark");  // genero imposto la classe dell'icona
-                    }
-                    else {
-                        saveButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
-                        var saveIcon = document.createElement("i");     // genero l'icona
-                        saveIcon.setAttribute("class", "bx bx-bookmark");  // genero imposto la classe dell'icona
-                    }
-                    saveButton.setAttribute("id", "save_"+currentImage.imgId);  // imposto l'ID del pulsante save al valore dell'ID dell'immagine
-                    saveButton.addEventListener("click", imageUtils.save);      // aggiungo il listener per l'evento save/unsave su click
-                    saveButton.appendChild(saveIcon);   // appendo l'icona al pulsante save
-                    imageInfo.appendChild(saveButton);  // appendo il pulsante save allo slider dell'info
+
+                var saveButton = document.createElement("button");     // genero il pulsante save
+                if(currentImage.isSaved) {
+                    saveButton.setAttribute("class", "gallery-image-buttons saved");  // imposto la classe pulsante immagine
+                    var saveIcon = document.createElement("i");     // genero l'icona
+                    saveIcon.setAttribute("class", "bx bxs-bookmark");  // genero imposto la classe dell'icona
                 }
+                else {
+                    saveButton.setAttribute("class", "gallery-image-buttons");  // imposto la classe pulsante immagine
+                    var saveIcon = document.createElement("i");     // genero l'icona
+                    saveIcon.setAttribute("class", "bx bx-bookmark");  // genero imposto la classe dell'icona
+                }
+                saveButton.setAttribute("id", "save_"+currentImage.imgId);  // imposto l'ID del pulsante save al valore dell'ID dell'immagine
+                saveButton.addEventListener("click", imageUtils.save);      // aggiungo il listener per l'evento save/unsave su click
+                saveButton.appendChild(saveIcon);   // appendo l'icona al pulsante save
+                imageInfo.appendChild(saveButton);  // appendo il pulsante save allo slider dell'info
 
 
                 imageFrame.appendChild(imageLink);  // setto l'immagine con link come figlia di imageFrame

@@ -27,7 +27,7 @@ $sql_gallery_img = "SELECT *
                     WHERE imgHidden=0 AND imgBlock=0 
                     ORDER BY imgDate DESC LIMIT $current_limit;";
 
-// nota: non c'è bisogno di prepared statement, poiché i parametri sono generati dal server stesso
+// nota: non c'è bisogno di prepared statement, poiché i parametri sono garantiti essere interpretati come interi
 $gallery_img_res = mysqli_query($conn, $sql_gallery_img);
 
 if(mysqli_num_rows($gallery_img_res) == 0) {   // galleria vuota

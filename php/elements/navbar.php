@@ -20,38 +20,26 @@
         </div>
 
         <div class="searchbox-frame">
-            <form class="searchbox-form" action="searchbox.php" method="POST"> <!-- TODO AGGIUNGERE PATH RICERCA -->
+            <form class="searchbox-form" action="search" method="GET">
                 <div class="clear-icon-frame"><i class='bx bx-x searchbox-clear'></i></div>
-                <input type="text" class="searchbox" name="searchbox" placeholder="Search">
-                <div class="search-icon-frame"><i class='bx bx-search-alt searchbox-search'></i></div>
+                <input type="text" class="searchbox text-box" name="search" placeholder="Search">
+                <button class="search-icon-frame"><i class='bx bx-search-alt searchbox-search'></i></button>
             </form>
         </div>
 
-        <div class="upload-image-button-frame">
-            <a class="upload-link" href="./upload">
-                <div class="upload-image-button button">
-                    <i class='bx bx-image-add upload-image-icon'></i>
-                    <p class="button-text">Post</p>
-                </div>
-            </a>
-        </div>
+        <a class="signature-button button" href="./help">Info</a>
 
-        <div class="nav-icons-frame">
-            <?php
-                if(isset($_SESSION["usrid"])) { echo "
-                    <ul class='nav-icons-list'>
-                        <li>
-                            <a href='#'><i class='bx bx-message nav-icon message-icon'></i></a>
-                            <!-- <i class='bx bxs-message-detail nav-icon message-icon'></i> -->
-                        </li>
-                        <li>
-                            <a href='#'><i class='bx bx-notification nav-icon'></i></a>
-                            <!-- <i class='bx bxs-notification nav-icon'></i> -->
-                        </li>
-                    </ul>";
-                }
-            ?>
-        </div>
+        <?php
+            echo '
+            <div class="upload-image-button-frame">
+                <a class="upload-link" href="./upload">
+                    <div class="upload-image-button button">
+                        <i class="bx bx-image-add upload-image-icon"></i>   
+                        <p class="button-text">Post</p>
+                    </div>
+                </a>
+            </div>';
+        ?>
         
         <div class="nav-profile-login-frame">
         <?php
@@ -87,13 +75,13 @@
                 else {
                     echo "  <div class='nav-login-frame'>
                                 <ul class='nav-login-list'>
-                                    <li class='nav-menu-item'><a href='./php/login'>
+                                    <li class='nav-menu-item'><a href='./login'>
                                         <div class='nav-login-button button'>
                                             <i class='bx bx-log-in-circle login-icon' ></i>
                                             <p class='button-text'>Log in</p>
                                         </div>
                                     </a></li>
-                                    <li class='nav-menu-item'><a href='./php/signup'>
+                                    <li class='nav-menu-item'><a href='./signup'>
                                         <div class='nav-signup-button button'>
                                             <i class='bx bx-spreadsheet signup-icon' ></i>
                                             <p class='reverse-button-text'>Sign up</p>
@@ -105,4 +93,17 @@
             ?>
         </div>
     </div>
+
+    <?php
+        if(isset($_SESSION["usrid"])) echo '
+            <div class="user-menu-frame hidden">
+                <ul class="user-menu">
+                    <li class="user-menu-item"><a href="./profile?user='.$_SESSION["usrname"].'&gallery=public"><i class="bx bxs-user user-menu-icon"></i>Profile</a></li>
+                    <li class="user-menu-item"><a href="./profile?user='.$_SESSION["usrname"].'&gallery=saved"><i class="bx bxs-save user-menu-icon" ></i>Saved</a></li>
+                    <li class="user-menu-item"><a href="./help"><i class="bx bxs-help-circle user-menu-icon"></i>Help</a></li>
+                    <li class="user-menu-item user-logout-item"><a href="./php/utils/logout_script.php"><i class="bx bx-log-out-circle user-menu-icon"></i>LogOut</a></li>
+                </ul>
+            </div>';
+    ?>
+
 </nav>

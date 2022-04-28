@@ -7,7 +7,7 @@
         else if($_GET["err"]=="up_err")
         echo "<p class='err-box'>Server err, please try again</p>";
         else if($_GET["err"]=="sz_2_lg")
-        echo "<p class='err-box'>Max file size is 10MB</p>";
+        echo "<p class='err-box'>Max file size is 2MB</p>";
     }
 
     // errori di registrazione

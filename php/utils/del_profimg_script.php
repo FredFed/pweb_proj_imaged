@@ -2,7 +2,7 @@
 
 session_start();
 if(!isset($_SESSION["usrid"])) {
-    header("location: ../login?error=bad_login");
+    header("location: ../../login?error=bad_login");
     exit();
 }
 require_once './db_conn_handler_script.php';

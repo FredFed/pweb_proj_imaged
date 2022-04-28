@@ -97,7 +97,7 @@ function create_user($conn, $username, $email, $password) {
     // ########## CREAZIONE UTENTE ##########
 
     // comando SQL INSERT
-    $sql = "INSERT INTO users (usrName, usrPswd, usrMail, usrDate, usrLvl) VALUES (?, ?, ?, now(), 0);";
+    $sql = "INSERT INTO users (usrName, usrPswd, usrMail, usrDate, usrLvl, usrBlock) VALUES (?, ?, ?, now(), 0, 0);";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
@@ -140,6 +140,7 @@ function create_user($conn, $username, $email, $password) {
     $_SESSION["usrname"] = $user_data["usrName"];  // recupera lo username
     $_SESSION["usrmail"] = $user_data["usrMail"];    //recupera l'email
     $_SESSION["usrlvl"] = $user_data["usrLvl"];     // recupera il livello di privilegio dell'utente
+    $_SESSION["usrblock"] = $user_data["usrBlock"];     // recupera info su eventuali ban dell'utente
     return("success");
 }
 
@@ -168,6 +169,7 @@ function login_user($conn, $username, $password) {
     $_SESSION["usrname"] = $user_data["usrName"];  // recupera lo username
     $_SESSION["usrmail"] = $user_data["usrMail"];    //recupera l'email
     $_SESSION["usrlvl"] = $user_data["usrLvl"];     // recupera il livello di privilegio dell'utente
+    $_SESSION["usrblock"] = $user_data["usrBlock"];     // recupera info su eventuali ban dell'utente
     return("success");
 }
 
@@ -241,10 +243,10 @@ function del_file($path) {
 }
 
 // aggiunge l'entry relativa all'immagine caricata alla tabella galleria
-function upload_gallery_img($conn, $usrid, $img_path, $img_title, $img_desc, $img_tags, $img_is_ls, $img_is_hidden) {
+function upload_gallery_img($conn, $usrid, $img_path, $img_title, $img_desc, $img_tags, $img_is_hidden) {
     // Comando SQL INSERT
-    $sql = "INSERT INTO gallery (usrId, imgName, imgTitle, imgDesc, imgTags, imgLsMode, imgHidden, imgBlock, imgDate) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, 0, now());";
+    $sql = "INSERT INTO gallery (usrId, imgName, imgTitle, imgDesc, imgTags, imgHidden, imgBlock, imgDate) 
+            VALUES (?, ?, ?, ?, ?, ?, 0, now());";
     $stmt = mysqli_stmt_init($conn);    // creo un prepared statement
 
     // preparo lo statement; se la preparazione è fallita, restituisce errore DB
@@ -252,7 +254,7 @@ function upload_gallery_img($conn, $usrid, $img_path, $img_title, $img_desc, $im
         return false;
     }
     // binding tra username e statement
-    mysqli_stmt_bind_param($stmt, "issssii", $usrid, $img_path, $img_title, $img_desc, $img_tags, $img_is_ls, $img_is_hidden);
+    mysqli_stmt_bind_param($stmt, "issssi", $usrid, $img_path, $img_title, $img_desc, $img_tags, $img_is_hidden);
     mysqli_stmt_execute($stmt); // eseguo lo statement
     mysqli_stmt_close($stmt);   // chiudo lo statement
 
@@ -263,14 +265,14 @@ function upload_gallery_img($conn, $usrid, $img_path, $img_title, $img_desc, $im
 // ritaglia l'immagine secondo la dimensione specificata
 function crop_image($src_path, $dest_path, $file_ext, $max_w, $max_h) {
     // controllo se il path dell'immagine è valido
-    if(!file_exists($src_path)) return("err=file_no_exist");
+    if(!file_exists($src_path)) return("err=file_no_exist_c");
 
     // recupero le informazioni sull'immagine in base all'estensione
     if($file_ext == "jpeg") {
-        $src_img = imagecreatefromjpeg($src_path);
+        if (!($src_img = imagecreatefromjpeg($src_path))) return;
     }
     else if($file_ext == "png") {
-        $src_img = imagecreatefrompng($src_path);
+        if (!($src_img = imagecreatefrompng($src_path))) return;
     }
     else return("err=img_not_supp");
 
@@ -330,7 +332,7 @@ function crop_image($src_path, $dest_path, $file_ext, $max_w, $max_h) {
 // rende l'altezza e la larghezza dell'immagine uguali (ritagliano ove necessario)
 function square_image($src_path, $dest_path, $file_ext) {
     // controllo se il path dell'immagine è valido
-    if(!file_exists($src_path)) return("err=file_no_exist");
+    if(!file_exists($src_path)) return("err=file_no_exist_s");
 
     // recupero le informazioni sull'immagine in base all'estensione
     if($file_ext == "jpeg") {
@@ -408,7 +410,7 @@ function drop_ext($filename) {
 
 // restituisce il numero di post dell'utente
 function posts_number($conn, $usrid) {
-    $sql = "SELECT COUNT(*) AS imgNum FROM gallery WHERE usrId = ? AND imgBlock=0 AND imgHidden=0 ;";
+    $sql = "SELECT count(*) AS imgNum FROM gallery WHERE usrId = ? AND imgBlock=0 AND imgHidden=0 ;";
     $stmt = mysqli_stmt_init($conn);
     if(!mysqli_stmt_prepare($stmt, $sql)) {
         return(-1);
@@ -440,7 +442,7 @@ function user_rank($post_num) {
 
 // restituisce il numero di post dell'utente TODO sostituire con la versione corretta
 function upvotes_number($conn, $usrid) {
-    $sql = "SELECT COUNT(*) AS imgNum FROM gallery WHERE usrId = ? ;";
+    $sql = "SELECT count(*) AS imgNum FROM gallery WHERE usrId = ? ;";
     $stmt = mysqli_stmt_init($conn);
     if(!mysqli_stmt_prepare($stmt, $sql)) {
         return(-1);
@@ -472,10 +474,14 @@ function check_key($conn, $key) {
 function generate_key($conn) {
     $key_length = 8;
     $alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $new_key=null;
 
     do {
         $new_key = substr(str_shuffle($alphabet), 0, $key_length);
     }while(!check_key($conn, $new_key));
+
+    $sql = "INSERT INTO keyvalues (keyValue) VALUES ('$new_key');";
+    mysqli_query($conn, $sql);
 
     return $new_key;
 }

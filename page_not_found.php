@@ -3,7 +3,7 @@
 session_start();
 require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
-include_once './php/utils/definitions.php';
+require_once './php/utils/definitions.php';
 
 ?>
 
@@ -21,16 +21,13 @@ include_once './php/utils/definitions.php';
         <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-        <script src="./js/ajax/ajax_utils.js"></script>
-        <script src="./js/loaders/likes_saves_loader.js"></script>
-        <script src="./js/loaders/homepage_gallery_loader.js"></script>
         <script src="./js/searchbox_clear.js"></script>
         <script src="./js/navbar_interaction.js"></script>
         <link rel="apple-touch-icon" sizes="180x180" href="./resources/icons/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="./resources/icons/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="./resources/icons/favicon-16x16.png">
         <link rel="manifest" href="./resources/icons/site.webmanifest">
-        <title>Imaged | Home</title>
+        <title>Imaged | Page not found</title>
     </head>
 
     <body>
@@ -41,12 +38,10 @@ include_once './php/utils/definitions.php';
         <section id="page_main_section">
 
             <!-- MAIN SECTION -->
-
-            <div class="gallery-frame">
-                <div class="gallery-section">
-                    <!-- include il codice della galleria da mostrare -->
-                    <?php include_once './php/elements/homepage_gallery.php'; ?>
-                </div>
+            <div class="missing-frame">
+                <h1 class="missing">404<br></h1>
+                <h2 class="missing-desc">Sorry! We weren't able to find this page.</h2>
+                <a class="missing-home-button button" href="./">Homepage</a>
             </div>
 
         </section>

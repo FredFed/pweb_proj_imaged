@@ -20,10 +20,10 @@ require_once './php/utils/definitions.php';
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
-        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
         <script src="./js/ajax/ajax_utils.js"></script>
         <script src="./js/searchbox_clear.js"></script>
-        <script src="./js/navbar_scroll.js"></script>
+        <script src="./js/navbar_interaction.js"></script>
         <title>Imaged</title>
     </head>
 

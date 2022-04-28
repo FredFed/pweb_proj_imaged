@@ -52,10 +52,10 @@ if($galleryType == "public-gallery") {     // immagini per la galleria pubblica
                         WHERE usrId='$usrid' AND imgHidden=0 AND imgBlock=0 
                         ORDER BY imgDate DESC LIMIT $current_limit;";
 }
-else if($galleryType == "private-gallery") {   // immagini per la galleria privata
+else if($galleryType == "private-gallery") {   // immagini per la galleria privata (anche bloccate)
     $sql_gallery_img = "SELECT * 
                         FROM gallery 
-                        WHERE usrId='$usrid' AND imgHidden=1 AND imgBlock=0 
+                        WHERE usrId='$usrid' AND imgHidden=1 OR imgBlock=1
                         ORDER BY imgDate DESC LIMIT $current_limit;";
 }
 else if($galleryType == "saved-gallery") {     // immagini per gli elementi salvati

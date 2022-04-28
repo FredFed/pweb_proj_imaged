@@ -10,13 +10,12 @@ if(isset($_POST["submit_img_gallery"])) {
     $img_title = $_POST['img_title'];
     $img_desc = $_POST['img_desc'];
     $img_tags = $_POST['img_tags'];
-    $img_ls = isset($_POST['img_ls']) ? 1 : 0;
     $img_hddn = isset($_POST['img_hidden']) ? 1 : 0;
 
     $img_name = $img['name'];
     $img_tmp_name = $_FILES['gallery_img']['tmp_name']; // TODO normalizzare
-    $img_size = $img['size'];
     $img_error = $img['error'];
+    $img_size = filesize($img_tmp_name);
 
     // recupero l'estensione (conversione implicita jpg -> jpeg)
     $img_ext = get_ext($img_name);
@@ -38,7 +37,7 @@ if(isset($_POST["submit_img_gallery"])) {
     }
 
     // se la dimensione è eccessiva, restituisci errore
-    if($img_size > $MAX_IMG_SIZE) {
+    if($img_size > $MAX_IMG_SIZE || $img_size==null) {
         header("location: ../../upload?err=sz_2_lg");
         exit();
     }
@@ -54,15 +53,15 @@ if(isset($_POST["submit_img_gallery"])) {
         $usrid = $_SESSION["usrid"];
         $usrname = $_SESSION["usrname"];
     }
-    else $usrid = NULL;
+    else $usrid = null;
 
     // ricavo il path finale dell'immagine
-    if($usrid==NULL) $img_pre_path = "../../resources/users/default/";
+    if($usrid==null) $img_pre_path = "../../resources/users/default/gallery/";
     else $img_pre_path = "../../resources/users/".$usrid."/gallery/";
     $img_path = $img_pre_path.$img_final_name;
 
     // aggiorno il database con l'entry relativa all'immagine
-    if(!upload_gallery_img($conn, $usrid, $img_final_name, $img_title, $img_desc, $img_tags, $img_ls, $img_hddn)) {
+    if(!upload_gallery_img($conn, $usrid, $img_final_name, $img_title, $img_desc, $img_tags, $img_hddn)) {
         header("location: ../../upload?err=up_img_err");
         exit();
     }
@@ -76,11 +75,11 @@ if(isset($_POST["submit_img_gallery"])) {
         unlink($image_path);    // rimuove l'immagine appena salvata
         header("location: ../../profile?user=".$usrname."&".$temperr);    // reindirizza + mostra errore
         exit();
-    } 
+    }
 
     // ritorno alla galleria dell'utente (se l'utente è loggato) o alla homepage
     if($usrid) header("location: ../../profile?user=".$usrname."&up_img=success");
-    else header("location: ../../");    // TODO sostituire con il link dell'immagine
+    else header("location: ../../image?id=".$img_name_no_ext);    // TODO sostituire con il link dell'immagine
     exit();
 }
 else {

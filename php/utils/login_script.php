@@ -14,23 +14,23 @@ if(isset($_POST["submit_login"])) {
 
     // controlla che non ci siano campi vuoti
     if(empty_login($username, $password) !== false) {
-        header("location: ../login?err=empty_input");  // returning the user to the signup form
+        header("location: ../../login?err=empty_input");  // returning the user to the signup form
         exit();     // manually terminating the script
     }
     // controlla se il nome utente è valido
     if(invalid_username($username) !== false && invalid_email($username) !== false) {
-        header("location: ../login?err=invalid_usr");
+        header("location: ../../login?err=invalid_usr");
         exit();
     }
     // controlla che la password sia valida
     if(invalid_password($password) !== false) {
-        header("location: ../login?err=invalid_pswd");
+        header("location: ../../login?err=invalid_pswd");
         exit();
     }
 
     // effettua il login dell'utente a partire dai dati recuperati dal login form
     if(($temperr=login_user($conn, $username, $password)) != "success") {
-        header("location: ../login?".$temperr);
+        header("location: ../../login?".$temperr);
         exit();
     }
 
@@ -40,7 +40,7 @@ if(isset($_POST["submit_login"])) {
 }
 // ... altrimenti, lo reindirizza al login
 else {
-    header("location: ../login");
+    header("location: ../../login");
     exit();
 }
 ?>

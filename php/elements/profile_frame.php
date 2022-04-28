@@ -35,15 +35,36 @@
                     </form>";
             */
         ?>
-        <a href='./php/utils/logout_script'>Log out</a>
     </div>
 
     <div class="profile-info-section">
-        <p class="profile-name"><?php echo $profileName; echo $badge; ?><br></p>
+        <h2 class="profile-name"><?php echo ucfirst($profileName); echo $badge; ?><br></h2>
         <p class="profile-desc">
-            <?php if(($numPosts = posts_number($conn, $profileId)) != -1) echo $numPosts." post"; ?>
-            <?php if(($usrRank = user_rank($numPosts)) != -1) echo ("  •  ".$usrRank); ?>
+            <?php if(($numPosts = posts_number($conn, $profileId)) != -1) echo $numPosts." posts"; ?>
+            <?php   if($profileLvl==1) echo ("  •  moderator");
+                    else if($profileLvl==2) echo ("  •  admin");
+                    else if(($usrRank = user_rank($numPosts)) != -1) echo ("  •  ".$usrRank);
+            ?>
         </p>
+    </div>
+
+    <div class="profile-admin-icons-frame">
+        <?php
+            // showing block icons to admins
+            if(!($isOwnProfile) && $priviledge==2 && $profileLvl<2) {
+                if($profileBlock) {$block_status="blocked"; $block_icon="bx bxs-lock";}
+                else {$block_status="unblocked"; $block_icon="bx bx-lock-open";}
+                echo "<button class='block-button ".$block_status."'><i class='block-icon ".$block_icon."'></i></button>";
+            }
+            else if(($isOwnProfile) && ($profileBlock)) echo "<p class='block-message'>You are blocked: you cannot post new images</p>";
+
+            // showing mod icons to admins
+            if(!($isOwnProfile) && $priviledge==2 && $profileLvl<2) {
+                if($profileLvl==0) {$status=""; $icon="bx bx-crown";}
+                else {$status="mod"; $icon="bx bxs-crown";}
+                echo "<button class='mod-button ".$status."'><i class='mod-icon ".$icon."'></i></button>";
+            }
+        ?>
     </div>
 
     <?php

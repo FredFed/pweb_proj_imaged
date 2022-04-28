@@ -2,7 +2,7 @@
 
 session_start();
 if(!isset($_SESSION["usrid"])) {
-    header("location: ../login?err=bad_login");
+    header("location: ../../login?err=bad_login");
     exit();
 }
 require_once './db_conn_handler_script.php';
@@ -16,9 +16,9 @@ if(isset($_POST['submit_prof_img'])) {
     $file = $_FILES["prof_img"];
     $file_name = $file["name"];
     $file_tmp_name = $file["tmp_name"];
-    $file_size = $file["size"];
     $file_error = $file["error"];
     $file_type = $file["type"];
+    $file_size = filesize($file_tmp_name);
 
     // recupero l'estensione (conversione implicita jpg -> jpeg)
     $file_ext = get_ext($file_name);
@@ -41,7 +41,7 @@ if(isset($_POST['submit_prof_img'])) {
     }
 
     // se la dimensione è maggiore di quella consentita, restituisci errore
-    if($file_size > $MAX_IMG_SIZE) {
+    if($file_size > $MAX_IMG_SIZE || $file_size==null) {
         header("location: ../../profile?user=".$usrname."&err=sz_2_lg");
         exit();
     }

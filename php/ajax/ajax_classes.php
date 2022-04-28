@@ -28,7 +28,6 @@ class Image {
     public $imgTitle;   // titolo dell'immagine
     public $imgDesc;    // descrizione dell'immagine
     public $imgTags;    // tags dell'immagine
-    public $imgLsMode;  // flag modalità landscape
     public $imgBlock;   // flag immagine bloccata
     public $imgHidden;  // flag immagine nascosta
     public $imgDate;    // data di caricamento dell'immagine
@@ -47,7 +46,6 @@ class Image {
         $this->imgTitle=null;
         $this->imgDesc=null;
         $this->imgTags=null;
-        $this->imgLsMode=null;
         $this->imgBlock=null;
         $this->imgHidden=null;
         $this->imgDate=null;
@@ -75,7 +73,6 @@ class Image {
         $this->imgTitle = $imgResult["imgTitle"];
         $this->imgDesc = $imgResult["imgDesc"];
         $this->imgTags = $imgResult["imgTags"];
-        $this->imgLsMode = $imgResult["imgLsMode"];
         $this->imgBlock = $imgResult["imgBlock"];
         $this->imgHidden = $imgResult["imgHidden"];
         $this->imgDate = $imgResult["imgDate"];
@@ -91,7 +88,7 @@ class Image {
 }
 
 // classe utilizzata per trasferire informazioni su likes e immagini salvate
-class ImageInteraction{
+class ImageInteraction {
     public $isLogged;   // indica se l'utente è loggato (abilitato a like/save)
     public $isOwnImage; // indica se l'immagine è dell'utente (loggato)
     public $likeCount;   //contatore dei likes correnti
@@ -112,6 +109,28 @@ class ImageInteraction{
         $this->likeCount=$likeCount;
         $this->isLiked=$isLiked;
         $this->isSaved=$isSaved;
+    }
+}
+
+// classe utilizzata per trasferire i commenti di un'immmagine al client
+class Comment {
+    public $authorName;     // nome dell'autore del commento
+    public $authorPImg;     // path dell'immagine profilo dell'autore
+    public $commentText;    // contenuto del commento
+    public $commentDate;    // data del commento
+
+    function Comment() {
+        $this->authorName=null;
+        $this->authorPImg=null;
+        $this->commentText=null;
+        $this->commentDate=null;
+    }
+
+    function buildResult($authorName, $authorPImg, $commentText, $commentDate) {
+        $this->authorName=$authorName;
+        $this->authorPImg=$authorPImg;
+        $this->commentText=$commentText;
+        $this->commentDate=$commentDate;
     }
 }
 
