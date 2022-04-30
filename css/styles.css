@@ -988,9 +988,14 @@ nav {
 
 .image-management-section {
     position: absolute;
-    right: 2.5%;
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
+    right: 2.5%;
+}
+
+.image-management-section .gallery-image-buttons {
+    margin-left: 10px;
 }
 
 .image-button {
