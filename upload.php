@@ -49,8 +49,11 @@ if(isset($_SESSION["usrblock"]))
                     <input class="text-box input-form" type="text" name="img_title" placeholder="Title...">
                     <input class="text-box input-form" type="text" name="img_desc" placeholder="Description...">
                     <input class="text-box input-form" type="text" name="img_tags" placeholder="Tags...">
-                    <input type="checkbox" id="img_hidden" name="img_hidden" value="hidden">
-                    <label id="img_is_hidden" for="img_hidden">Private image</label><br>
+                    <?php
+                        if(isset($_SESSION["usrid"]))
+                            echo '  <input type="checkbox" id="img_hidden" name="img_hidden" value="hidden">
+                                    <label id="img_is_hidden" for="img_hidden">Private image</label><br>';
+                    ?>
                     <input type="file" name="gallery_img" accept="image/jpeg, image/png" required>
                     <button class="button form-button site-font" type="submit" name="submit_img_gallery">POST</button>
                     <?php
