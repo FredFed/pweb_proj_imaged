@@ -103,6 +103,7 @@ if(mysqli_num_rows($img_info_res) != 0) {
         <script src="./js/like_save_script.js"></script>
         <script src="./js/loaders/comments_loader.js"></script>
         <script src="./js/loaders/image_block_loader.js"></script>
+        <script src="./js/loaders/image_hide_loader.js"></script>
         <script src="./js/searchbox_clear.js"></script>
         <script src="./js/navbar_interaction.js"></script>
         <link rel="apple-touch-icon" sizes="180x180" href="./resources/icons/apple-touch-icon.png">

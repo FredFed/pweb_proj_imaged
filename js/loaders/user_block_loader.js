@@ -5,6 +5,7 @@ function user_block_loader() {
     const username = document.querySelector(".profile-name").textContent;
 
      if(blockButton) blockButton.addEventListener("click", () => {
+        this.disabled = true;
         let modButton = document.querySelector(".mod-button");
 
         let request = {};
@@ -52,6 +53,7 @@ function user_block_loader() {
 
             }, JSON.stringify(request));
         }
+        this.disabled = false;
     })
 }
 

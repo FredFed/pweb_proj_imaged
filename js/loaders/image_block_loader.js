@@ -5,6 +5,7 @@ function block_loader() {
     const blockButton = document.querySelector(".block-button");
 
     if(blockButton) blockButton.addEventListener("click", () => {
+        this.disabled = true;
         var imageInfo = {};     // creo l'oggetto da passare alla richiesta Ajax
         imageInfo.imageId = (blockButton.id).replace("block_", "");    // recupero l'ID dell'immagine dal pulsante block
 
@@ -48,6 +49,7 @@ function block_loader() {
 
             }, JSON.stringify(imageInfo));
         }
+        this.disabled = false;
     });
 }
 

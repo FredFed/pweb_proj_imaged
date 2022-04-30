@@ -44,7 +44,8 @@ if(isset($_SESSION["usrblock"]))
 
             <div class="upload_to_gallery">
                 <h3><a href="./" class="login-signup-logo">imaged</a></h3>
-                <form class="multi-function-form" action="./php/utils/upload_gallery_script.php" method="POST" enctype="multipart/form-data">
+                <form class="multi-function-form" action="./php/utils/upload_gallery_script.php" 
+                            onsubmit="submit_img_gallery.disabled=true; return true;" method="POST" enctype="multipart/form-data">
                     <input class="text-box input-form" type="text" name="img_title" placeholder="Title...">
                     <input class="text-box input-form" type="text" name="img_desc" placeholder="Description...">
                     <input class="text-box input-form" type="text" name="img_tags" placeholder="Tags...">
