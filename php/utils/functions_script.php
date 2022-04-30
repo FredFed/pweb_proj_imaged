@@ -224,6 +224,31 @@ function delete_prof_img($conn) {
     return true;
 }
 
+// registra la cancellazione dell'immagine specificata e aggiorna il DB
+function delete_gallery_img($conn, $img_id, $usrid) {
+    // ######### AGGIORNAMENTO DB ##########
+
+    // comando SQL SELECT per recuperare il path dell'immagine
+    $sql = "SELECT usrId, imgName FROM gallery WHERE imgId='$img_id';";
+    $result = mysqli_query($conn, $sql);    // esegue la query nel DB
+    $row = mysqli_fetch_assoc($result);
+    $img_path="../../resources/users/".$usrid."/gallery/".$row["imgName"];
+
+    // comando SQL DELETE
+    $sql = "DELETE FROM gallery WHERE imgId='$img_id';";
+    mysqli_query($conn, $sql);    // esegue la query nel DB
+    // NOTA: non c'è bisogno di prepared statement, perché l'imgId è generato dal server stesso
+
+
+    // ########## ELIMINAZIONE FILE ##########
+
+    if(!unlink($img_path)) return false;
+    $img_no_ext = preg_replace("/\.[^.]+$/", "", $img_path);
+    if(!unlink($img_no_ext."cropped.".get_ext($img_path))) return false;
+
+    return true;
+}
+
 // recupera l'estensione dell'immagine profilo dell'utente
 function get_pimg_ext($usrid) {
     // recupero il nome dell'immagine del profilo
@@ -329,7 +354,7 @@ function crop_image($src_path, $dest_path, $file_ext, $max_w, $max_h) {
 }
 
 
-// rende l'altezza e la larghezza dell'immagine uguali (ritagliano ove necessario)
+// rende l'altezza e la larghezza dell'immagine uguali (ritagliando ove necessario)
 function square_image($src_path, $dest_path, $file_ext) {
     // controllo se il path dell'immagine è valido
     if(!file_exists($src_path)) return("err=file_no_exist_s");

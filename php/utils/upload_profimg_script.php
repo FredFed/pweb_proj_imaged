@@ -42,7 +42,7 @@ if(isset($_POST['submit_prof_img'])) {
 
     // se la dimensione è maggiore di quella consentita, restituisci errore
     if($file_size > $MAX_IMG_SIZE || $file_size==null) {
-        header("location: ../../profile?user=".$usrname."&err=sz_2_lg");
+        header("location: ../../profile?user=".$usrname."&err=pi_sz_2_lg");
         exit();
     }
 

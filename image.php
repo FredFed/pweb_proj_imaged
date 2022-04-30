@@ -145,9 +145,20 @@ if(mysqli_num_rows($img_info_res) != 0) {
                                     echo "  <p>&nbsp;&nbsp;</p>";
                                     echo " <button id='save_".$imgId."' 
                                                             class='gallery-image-buttons save-button ".$saveClass." image-button'><i class='bx ".$saveIcon."'></i></button>";
-                                    if(isset($_SESSION["usrid"]) && $_SESSION["usrlvl"]>0)
-                                    echo "  <button id='block_".$imgId."'
-                                                            class='gallery-image-buttons block-button ".$blockClass." image-button'><i class='bx bx-block ".$blockIcon."'></i></button>";
+                                    echo " <div class='image-management-section'>";
+                                        if($isOwnImage)
+                                        echo "  <form action='./php/utils/del_gallery_script.php' method='POST'>
+                                                    <input type='hidden' name='img_id' value='".$imgId."'>
+                                                    <input type='hidden' name='img_name' value'".$imgName."'>
+                                                    <input type='hidden' name='img_author' value='".$imgAuthor."'>
+                                                    <button class='gallery-image-buttons delete-button image-button' type='submit' name='del_img'>
+                                                        <i class='bx bxs-trash'></i>
+                                                    </button>
+                                                </form>";
+                                        if(isset($_SESSION["usrid"]) && $_SESSION["usrlvl"]>0)
+                                        echo "  <button id='block_".$imgId."'
+                                                                class='gallery-image-buttons block-button ".$blockClass." image-button'><i class='bx bx-block ".$blockIcon."'></i></button>";
+                                    echo " </div>";
                                 }
                             ?>
                         </div>
