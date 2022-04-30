@@ -9,7 +9,7 @@ include_once './php/utils/definitions.php';
 if(!isset($_GET["id"])) header("location: ./page_not_found");   // bad URL
 else $imgKey = $_GET["id"].".%";
 
-$sql = "SELECT * FROM gallery WHERE imgName LIKE ? AND imgHidden=0;";
+$sql = "SELECT * FROM gallery WHERE imgName LIKE ?;";
 $stmt = mysqli_stmt_init($conn);
 if(!mysqli_stmt_prepare($stmt, $sql)) {
     header("location: ./index?err=db_err");   // DB error
@@ -136,9 +136,11 @@ if(mysqli_num_rows($img_info_res) != 0) {
                                     $likeClass = ""; $likeIcon="bx-heart";
                                     $saveClass = ""; $saveIcon="bx-bookmark";
                                     $blockClass = ""; $blockIcon="";
+                                    $hideClass = ""; $hideIcon="bx-hide";
                                     if($isLiked) {$likeClass = "liked"; $likeIcon = "bxs-heart";}
                                     if($isSaved) {$saveClass = "saved"; $saveIcon = "bxs-bookmark";}
                                     if($imgBlock) {$blockClass = "blocked"; $blockIcon = "block-color";}
+                                    if($imgHidden) {$hideClass = "img_hidden"; $hideIcon = "bxs-hide";}
                                     echo " <button id='like_".$imgId."' 
                                                             class='gallery-image-buttons like-button ".$likeClass." image-button'><i class='bx ".$likeIcon."'></i></button>";
                                     echo "  <p class='gallery-image-counter image-button'>".$likeCount."</p>";
@@ -147,9 +149,10 @@ if(mysqli_num_rows($img_info_res) != 0) {
                                                             class='gallery-image-buttons save-button ".$saveClass." image-button'><i class='bx ".$saveIcon."'></i></button>";
                                     echo " <div class='image-management-section'>";
                                         if($isOwnImage)
+                                        echo "  <button id='hide_".$imgId."'
+                                                            class='gallery-image-buttons hide-button ".$hideClass." image-button'><i class='bx ".$hideIcon."'></i></button>";
                                         echo "  <form action='./php/utils/del_gallery_script.php' method='POST'>
                                                     <input type='hidden' name='img_id' value='".$imgId."'>
-                                                    <input type='hidden' name='img_name' value'".$imgName."'>
                                                     <input type='hidden' name='img_author' value='".$imgAuthor."'>
                                                     <button class='gallery-image-buttons delete-button image-button' type='submit' name='del_img'>
                                                         <i class='bx bxs-trash'></i>
