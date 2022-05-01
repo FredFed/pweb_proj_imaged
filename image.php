@@ -52,6 +52,11 @@ else {
     else $authorName = "";
 }
 
+// recupero il percorso dell'immagine
+if($imgAuthor) $imgSource = "./resources/users/".$imgAuthor."/gallery/".$imgName;
+else $imgSource = "./resources/users/default/gallery/".$imgName;
+
+
 // se l'utente è loggato, controllare se ha un like/save sull'immagine
 $isLiked = false;
 $isSaved = false;
@@ -125,11 +130,20 @@ if(mysqli_num_rows($img_info_res) != 0) {
             <div class="image-container">
                 <div class="image-comment-frame">
                     <div class="image-frame">
-                        <?php echo "<h2 id='".$imgId."' class='image-title'>".$imgTitle."</h2>"; ?>
+                        <?php echo "    <div class='image-header'>
+                                            <h2 id='".$imgId."' class='image-title'>".$imgTitle."</h2>
+                                            <div class='image-options-section'>
+                                                <div class='image-options-menu options-buttons'>
+                                                    <a class='option-button' href='".$imgSource."' download><i class='bx bxs-download' ></i></a>
+                                                    <button class='option-button'><i class='bx bxs-flag-alt' ></i></button>
+                                                </div>
+                                                <div class='image-options-menu options-frame'>
+                                                    <i class='image-options-icon bx bx-dots-vertical-rounded' ></i>
+                                                </div>
+                                            </div>
+                                        </div>"; ?>
 
-                        <?php   if($imgAuthor) echo "<img src='./resources/users/".$imgAuthor."/gallery/".$imgName."' alt='".$imgTitle."' class='image'>";
-                                else echo "<img src='./resources/users/default/gallery/".$imgName."' alt='".$imgTitle."' class='image'>"
-                        ?>
+                        <?php echo "<img src='".$imgSource."' alt='".$imgTitle."' class='image'>"; ?>
 
                         <div class="image-status-bar">
                             <?php
