@@ -17,7 +17,6 @@
             <div class="missing-frame">
                 <h1 class="missing">403<br></h1>
                 <h2 class="missing-desc">Forbidden: you don't have the necessary permissions to visualize the requested resource or visit the requested folder.</h2>
-                <a class="missing-home-button button" href="<?php echo $_SERVER["SERVER_NAME"]; ?>">Homepage</a>
             </div>
 
         </section>
