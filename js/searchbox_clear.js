@@ -4,6 +4,8 @@ function searchbox_clear() {
     const searchButton = document.querySelector(".search-icon-frame");
     const searchbox = document.querySelector(".searchbox");
 
+    // se è stata effettuata una ricerca, ne inserisce il valore nel searchbox
+
     // il pulsante è inizialmente disabilitato
     searchButton.disabled = true;
 
@@ -13,8 +15,8 @@ function searchbox_clear() {
     });
 
     // fare in modo che non si possano fare ricerche vuote
-    searchbox.addEventListener("keydown", () => {
-        if(searchbox.value == "") searchButton.disabled=true;
+    searchbox.addEventListener("keyup", (e) => {
+        if(e.target.value == "") searchButton.disabled=true;
         else searchButton.disabled=false;
     });
 }
