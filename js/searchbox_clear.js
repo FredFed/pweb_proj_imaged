@@ -5,6 +5,11 @@ function searchbox_clear() {
     const searchbox = document.querySelector(".searchbox");
 
     // se è stata effettuata una ricerca, ne inserisce il valore nel searchbox
+    window.location.search.substr(1).split("&").forEach((field) => {
+        param = field.split("=");
+        if(param[0] === "search") searchbox.value = param[1];
+    });
+
 
     // il pulsante è inizialmente disabilitato
     searchButton.disabled = true;

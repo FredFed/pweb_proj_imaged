@@ -5,6 +5,8 @@ require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
 require_once './php/utils/definitions.php';
 
+if(!isset($_GET["search"]) || $_GET["search"]=="") header("location: ./");
+
 ?>
 
 
@@ -48,40 +50,37 @@ require_once './php/utils/definitions.php';
                         <h2 class="search-result-type">Profiles:</h2>
                         <div class="search-results-frame">
                             <?php
-                                if(isset($_GET["search"])) {
-                                    $search = $_GET["search"];
-                                    $searchString = "%$search%";
-                                    $sql = "SELECT * FROM users INNER JOIN profimage ON users.usrId = profimage.usrId WHERE usrName LIKE ?;";
-                                    $stmt = mysqli_stmt_init($conn);
-                                    mysqli_stmt_prepare($stmt, $sql);
-                                    mysqli_stmt_bind_param($stmt, "s", $searchString);
-                                    mysqli_stmt_execute($stmt);
-                                    $results = mysqli_stmt_get_result($stmt);
-                                    mysqli_stmt_close($stmt);
-                                    
-                                    while(($entry = mysqli_fetch_assoc($results))) {
-                                        // getting the profile image path
-                                        if($entry["piIsSet"]==true) {
-                                            // recupero il nome dell'immagine del profilo
-                                            $filename = "./resources/users/".$entry["usrId"]."/profile".$entry["usrId"]."*";
-                                            // recupero l'estensione prendendo il primo match della funzione "glob" e tenendo la parte finale
-                                            $file_meta = glob($filename);
-                                            $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
+                                $search = $_GET["search"];
+                                $searchString = "%$search%";
+                                $sql = "SELECT * FROM users INNER JOIN profimage ON users.usrId = profimage.usrId WHERE usrName LIKE ?;";
+                                $stmt = mysqli_stmt_init($conn);
+                                mysqli_stmt_prepare($stmt, $sql);
+                                mysqli_stmt_bind_param($stmt, "s", $searchString);
+                                mysqli_stmt_execute($stmt);
+                                $results = mysqli_stmt_get_result($stmt);
+                                mysqli_stmt_close($stmt);
+                                
+                                while(($entry = mysqli_fetch_assoc($results))) {
+                                    // getting the profile image path
+                                    if($entry["piIsSet"]==true) {
+                                        // recupero il nome dell'immagine del profilo
+                                        $filename = "./resources/users/".$entry["usrId"]."/profile".$entry["usrId"]."*";
+                                        // recupero l'estensione prendendo il primo match della funzione "glob" e tenendo la parte finale
+                                        $file_meta = glob($filename);
+                                        $ext = get_ext($file_meta[0]);  // recupero l'estensione del file (il primo match)
 
-                                            $userImg = "./resources/users/".$entry["usrId"]."/profile".$entry["usrId"].".".$ext;
-                                        }
-                                        else $userImg = $DFLT_PROF_IMG;
-                                        echo    "
-                                                <div class='profile-search-result'>
-                                                    <a href='./profile?user=".$entry["usrName"]."'>
-                                                        <img src='".$userImg."' class='profile-search-image' alt='search result'>
-                                                    </a>
-                                                    <a href='./profile?user=".$entry["usrName"]."'>".$entry["usrName"]."</a>
-                                                </div>
-                                        ";
+                                        $userImg = "./resources/users/".$entry["usrId"]."/profile".$entry["usrId"].".".$ext;
                                     }
+                                    else $userImg = $DFLT_PROF_IMG;
+                                    echo    "
+                                            <div class='profile-search-result'>
+                                                <a href='./profile?user=".$entry["usrName"]."'>
+                                                    <img src='".$userImg."' class='profile-search-image' alt='search result'>
+                                                </a>
+                                                <a href='./profile?user=".$entry["usrName"]."'>".$entry["usrName"]."</a>
+                                            </div>
+                                    ";
                                 }
-                                else echo "<p>No usernames matched your search criteria</p>";
                             ?>
                         </div>
                         <div class="search-delimiter"></div>
@@ -91,10 +90,37 @@ require_once './php/utils/definitions.php';
                         <h2 class="search-result-type">Images by title:</h2>
                         <div class="search-results-frame">
                             <?php
-                                if(isset($_GET["search"])) {
+                                $search = $_GET["search"];
+                                $searchString = "%$search%";
+                                $sql = "SELECT * FROM gallery WHERE imgTitle LIKE ? AND usrId IS NOT NULL;";
+                                $stmt = mysqli_stmt_init($conn);
+                                mysqli_stmt_prepare($stmt, $sql);
+                                mysqli_stmt_bind_param($stmt, "s", $searchString);
+                                mysqli_stmt_execute($stmt);
+                                $results = mysqli_stmt_get_result($stmt);
+                                mysqli_stmt_close($stmt);
+                                
+                                while(($entry = mysqli_fetch_assoc($results))) {
+                                    $imageName = preg_replace("/\.[^.]+$/", "", $entry["imgName"]);
+                                    echo    "
+                                            <div class='image-search-result'>
+                                            <a href='./image?id=".$imageName."' style='background-image: url(./resources/users/".$entry["usrId"]."/gallery/".$entry["imgName"].")' class='image-search-image'></a>
+                                                <a href='./image?id=".$imageName."'>".$entry["imgTitle"]."</a>
+                                            </div>
+                                    ";
+                                }
+                            ?>
+                        </div>
+                        <div class="search-delimiter"></div>
+                    </div>
+
+                    <div class="results-section">
+                        <h2 class="search-result-type">Images by tags:</h2>
+                        <div class="search-results-frame">
+                            <?php
                                     $search = $_GET["search"];
                                     $searchString = "%$search%";
-                                    $sql = "SELECT * FROM gallery WHERE imgTitle LIKE ? AND usrId IS NOT NULL;";
+                                    $sql = "SELECT * FROM gallery WHERE imgTags LIKE ? AND usrId IS NOT NULL;";
                                     $stmt = mysqli_stmt_init($conn);
                                     mysqli_stmt_prepare($stmt, $sql);
                                     mysqli_stmt_bind_param($stmt, "s", $searchString);
@@ -111,39 +137,6 @@ require_once './php/utils/definitions.php';
                                                 </div>
                                         ";
                                     }
-                                }
-                                else echo "<p>No images matched your search criteria</p>";
-                            ?>
-                        </div>
-                        <div class="search-delimiter"></div>
-                    </div>
-
-                    <div class="results-section">
-                        <h2 class="search-result-type">Images by tags:</h2>
-                        <div class="search-results-frame">
-                            <?php
-                                    if(isset($_GET["search"])) {
-                                        $search = $_GET["search"];
-                                        $searchString = "%$search%";
-                                        $sql = "SELECT * FROM gallery WHERE imgTags LIKE ? AND usrId IS NOT NULL;";
-                                        $stmt = mysqli_stmt_init($conn);
-                                        mysqli_stmt_prepare($stmt, $sql);
-                                        mysqli_stmt_bind_param($stmt, "s", $searchString);
-                                        mysqli_stmt_execute($stmt);
-                                        $results = mysqli_stmt_get_result($stmt);
-                                        mysqli_stmt_close($stmt);
-                                        
-                                        while(($entry = mysqli_fetch_assoc($results))) {
-                                            $imageName = preg_replace("/\.[^.]+$/", "", $entry["imgName"]);
-                                            echo    "
-                                                    <div class='image-search-result'>
-                                                    <a href='./image?id=".$imageName."' style='background-image: url(./resources/users/".$entry["usrId"]."/gallery/".$entry["imgName"].")' class='image-search-image'></a>
-                                                        <a href='./image?id=".$imageName."'>".$entry["imgTitle"]."</a>
-                                                    </div>
-                                            ";
-                                        }
-                                    }
-                                    else echo "<p>No images matched your search criteria</p>";
                                 ?>
                         </div>
                         <div class="search-delimiter"></div>
