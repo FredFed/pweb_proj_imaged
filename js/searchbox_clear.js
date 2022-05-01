@@ -4,6 +4,9 @@ function searchbox_clear() {
     const searchButton = document.querySelector(".search-icon-frame");
     const searchbox = document.querySelector(".searchbox");
 
+    // il pulsante è inizialmente disabilitato
+    searchButton.disabled = true;
+
     // fare in modo che cliccare la clearIcon non rimuova il focus
     clearIcon.addEventListener("click", () => {
         searchbox.value = "";
