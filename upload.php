@@ -46,12 +46,12 @@ if(isset($_SESSION["usrblock"]))
                 <h3><a href="./" class="login-signup-logo">imaged</a></h3>
                 <form class="multi-function-form" action="./php/utils/upload_gallery_script.php" 
                             onsubmit="submit_img_gallery.disabled=true; return true;" method="POST" enctype="multipart/form-data">
-                    <input class="text-box input-form" type="text" name="img_title" placeholder="Title...">
-                    <input class="text-box input-form" type="text" name="img_desc" placeholder="Description...">
-                    <input class="text-box input-form" type="text" name="img_tags" placeholder="Tags...">
+                    <input class="text-box input-form" type="text" name="img_title" placeholder="Title..." autocomplete="off">
+                    <input class="text-box input-form" type="text" name="img_desc" placeholder="Description..." autocomplete="off">
+                    <input class="text-box input-form" type="text" name="img_tags" placeholder="Tags..." autocomplete="off">
                     <?php
                         if(isset($_SESSION["usrid"]))
-                            echo '  <input type="checkbox" id="img_hidden" name="img_hidden" value="hidden">
+                            echo '  <input type="checkbox" id="img_hidden" name="img_hidden" value="hidden" autocomplete="off">
                                     <label id="img_is_hidden" for="img_hidden">Private image</label><br>';
                     ?>
                     <input type="file" name="gallery_img" accept="image/jpeg, image/png" required>
