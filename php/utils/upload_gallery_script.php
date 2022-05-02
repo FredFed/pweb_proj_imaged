@@ -5,7 +5,7 @@ require_once './db_conn_handler_script.php';
 require_once './functions_script.php';
 require_once './definitions.php';
 
-if(isset($_POST["submit_img_gallery"])) {
+if(isset($_POST["img_submitted"])) {
     $img = $_FILES['gallery_img'];
     $img_title = $_POST['img_title'];
     $img_desc = $_POST['img_desc'];
@@ -83,6 +83,6 @@ if(isset($_POST["submit_img_gallery"])) {
     exit();
 }
 else {
-    header("location: ../../");
+    header("location: ../../?&err=forbidden");
     exit();
 }
