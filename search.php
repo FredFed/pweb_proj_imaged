@@ -92,7 +92,7 @@ if(!isset($_GET["search"]) || $_GET["search"]=="") header("location: ./");
                             <?php
                                 $search = $_GET["search"];
                                 $searchString = "%$search%";
-                                $sql = "SELECT * FROM gallery WHERE imgTitle LIKE ? AND usrId IS NOT NULL;";
+                                $sql = "SELECT * FROM gallery WHERE imgTitle LIKE ? AND imgHidden=0 AND imgBlock=0 AND usrId IS NOT NULL;";
                                 $stmt = mysqli_stmt_init($conn);
                                 mysqli_stmt_prepare($stmt, $sql);
                                 mysqli_stmt_bind_param($stmt, "s", $searchString);
@@ -120,7 +120,7 @@ if(!isset($_GET["search"]) || $_GET["search"]=="") header("location: ./");
                             <?php
                                     $search = $_GET["search"];
                                     $searchString = "%$search%";
-                                    $sql = "SELECT * FROM gallery WHERE imgTags LIKE ? AND usrId IS NOT NULL;";
+                                    $sql = "SELECT * FROM gallery WHERE imgTags LIKE ? AND imgHidden=0 AND imgBlock=0 AND usrId IS NOT NULL;";
                                     $stmt = mysqli_stmt_init($conn);
                                     mysqli_stmt_prepare($stmt, $sql);
                                     mysqli_stmt_bind_param($stmt, "s", $searchString);
