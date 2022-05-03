@@ -7,7 +7,7 @@ require_once './php/utils/definitions.php';
 
 // controllo se l'URL rappresenta un profilo valido
 if(!isset($_GET["user"])) header("location: ./page_not_found"); // bad URL
-else $profileName = ucfirst($_GET["user"]);
+else $profileName = $_GET["user"];
 
 // controllo se il profilo appartiene all'utente loggato
 $isOwnProfile = false;  // TRUE se l'utente è il proprietario del profilo, FALSE altrimenti
@@ -73,7 +73,7 @@ else if($profileLvl == 2) $badge = "<i class='bx bxs-crown lvl-icon'></i>";  // 
         <link rel="icon" type="image/png" sizes="32x32" href="./resources/icons/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="./resources/icons/favicon-16x16.png">
         <link rel="manifest" href="./resources/icons/site.webmanifest">
-        <title>Imaged | <?php echo $profileName; ?></title>
+        <title>Imaged | <?php echo ucfirst($profileName); ?></title>
     </head>
     <body>
         <header>
