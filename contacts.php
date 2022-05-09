@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+$_SESSION["prevurl"]=$_SERVER["REQUEST_URI"];
 require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
 require_once './php/utils/definitions.php';
@@ -24,7 +25,7 @@ require_once './php/utils/definitions.php';
         <script src="./js/ajax/ajax_utils.js"></script>
         <script src="./js/searchbox_clear.js"></script>
         <script src="./js/navbar_interaction.js"></script>
-        <title>Imaged</title>
+        <title>Imaged | Contacts</title>
     </head>
 
     <body>

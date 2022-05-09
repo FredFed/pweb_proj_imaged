@@ -5,9 +5,9 @@
     --button-hovered-color: #3887fd;
     --button-pressed-color: #044dbb;
     --light-bg-color: #282828;
-    --bg-color: #1a1a1a;
+    --bg-color: #1F1F1F;
     --dark-bg-color: #0f0f0f;
-    --header-bg-color: #001220;
+    --header-bg-color: #001230;
     --grey: #a0a0a0;
     --standard-shadow: 0px 12px 4px 1px rgba(0, 0, 0, .3);
     --nav-height: 80px;
@@ -1431,6 +1431,31 @@ nav {
 
 
 /* ########## UPLOAD PAGE ########## */
+
+.form-header {
+    position: relative;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.back-button-form {
+    position: absolute;
+}
+
+.back-button {
+    display: flex;
+    font-size: 2em;
+    padding: 2%;
+    border: 2px solid var(--grey);
+    border-radius: 50%;
+    transition: 0.1s linear;
+}
+
+.back-button:hover {
+    background-color:rgba(255, 255, 255, 0.2)
+}
 
 .upload_to_gallery {
     background-color: var(--dark-bg-color);

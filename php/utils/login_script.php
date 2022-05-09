@@ -35,7 +35,12 @@ if(isset($_POST["submit_login"])) {
     }
 
     // reindirizza l'utente in seguito al login
-    header("location: ../../profile?user=".$username."&login=success");    // rimanda l'utente alla HomePage
+    if(isset($_SESSION["prevurl"])) {
+        $urlq="?";
+        if(parse_url($_SESSION["prevurl"], PHP_URL_QUERY)) $urlq="&";
+        header("location: ".$_SESSION["prevurl"].$urlq."login=success");
+    }
+    else header("location: ../../profile?user=".$username."&login=success");    // rimanda l'utente alla HomePage
     exit();
 }
 // ... altrimenti, lo reindirizza al login

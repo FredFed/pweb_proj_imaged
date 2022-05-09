@@ -65,6 +65,11 @@ if(isset($_POST["submit_signup"])) {
     mkdir("../../resources/users/".$usrid."/gallery", 0777, true);
 
     // reindirizza l'utente alla in seguito al signup
+    if(isset($_SESSION["prevurl"])) {
+        $urlq="?";
+        if(parse_url($_SESSION["prevurl"], PHP_URL_QUERY)) $urlq="&";
+        header("location: ".$_SESSION["prevurl"].$urlq."signup=success");
+    }
     header("location: ../../profile?user=".$username."&signup=success");
     exit();
 }

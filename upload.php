@@ -25,6 +25,7 @@ if(isset($_SESSION["usrblock"]))
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
         <script src="./js/ajax/ajax_utils.js"></script>
+        <script src="./js/form_button.js"></script>
         <link rel="apple-touch-icon" sizes="180x180" href="./resources/icons/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="./resources/icons/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="./resources/icons/favicon-16x16.png">
@@ -43,7 +44,14 @@ if(isset($_SESSION["usrblock"]))
             <!-- MAIN SECTION -->
 
             <div class="upload_to_gallery">
-                <h3><a href="./" class="login-signup-logo">imaged</a></h3>
+                <div class="form-header">
+                    <h3><a href="./" class="login-signup-logo">imaged</a></h3>
+                    <form id="back-button-form" action="<?php if(isset($_SESSION)) echo $_SESSION["prevurl"]; else echo "./"; ?>" method="post">
+                        <button class="back-button" type="submit" value="Go back">
+                            <i class='bx bx-left-arrow-alt'></i>
+                        </button>
+                    </form>
+                </div>
                 <form class="multi-function-form" action="./php/utils/upload_gallery_script.php" onsubmit="submit_img_gallery.disabled=true; return true;" method="POST" enctype="multipart/form-data">
                     <input class="text-box input-form" type="text" name="img_title" placeholder="Title..." autocomplete="off">
                     <input class="text-box input-form" type="text" name="img_desc" placeholder="Description..." autocomplete="off">

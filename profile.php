@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+$_SESSION["prevurl"]=$_SERVER["REQUEST_URI"];
 require_once './php/utils/db_conn_handler_script.php';
 require_once './php/utils/functions_script.php';
 require_once './php/utils/definitions.php';
